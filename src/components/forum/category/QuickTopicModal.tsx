@@ -13,7 +13,6 @@ import { WysiwygEditor } from "@/components/ui/wysiwyg-editor";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,

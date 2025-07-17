@@ -42,12 +42,9 @@ const ContactFormModal = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke(
-        "send-contact-email",
-        {
-          body: formData,
-        }
-      );
+      const { error } = await supabase.functions.invoke("send-contact-email", {
+        body: formData,
+      });
 
       if (error) {
         throw error;
@@ -217,6 +214,8 @@ export const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
+                      aria-label="facebook"
+                      title="Facebook"
                     >
                       <Facebook className="h-5 w-5" />
                     </a>
@@ -237,6 +236,7 @@ export const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
+                      title="Twitter"
                     >
                       <Twitter className="h-5 w-5" />
                     </a>
@@ -257,6 +257,7 @@ export const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
+                      title="Instagram"
                     >
                       <Instagram className="h-5 w-5" />
                     </a>
@@ -277,6 +278,7 @@ export const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
+                      title="Youtube"
                     >
                       <Youtube className="h-5 w-5" />
                     </a>
