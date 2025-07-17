@@ -4,7 +4,6 @@ import React from "react";
 import { RedirectHandler } from "@/components/RedirectHandler";
 import { ForumHeader } from "./ForumHeader";
 import { ForumSidebarNav } from "./ForumSidebarNav";
-import { ForumStats } from "../forum/forum/ForumStats";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { useIsMobile } from "@/hooks/use-mobile";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -49,14 +49,7 @@ export const ReportDetailsModal = ({
   const { toast } = useToast();
 
   // Load reporter behavior data when modal opens
-  useEffect(() => {
-    if (isOpen && report) {
-      loadReporterData();
-      loadPreviousReports();
-    }
-  }, [isOpen, report]);
-
-  const loadReporterData = async () => {
+  const loadReporterData = useCallback(async () => {
     if (!report) return;
 
     try {
@@ -68,9 +61,9 @@ export const ReportDetailsModal = ({
     } catch (error) {
       console.error("Error loading reporter behavior:", error);
     }
-  };
+  }, [report]);
 
-  const loadPreviousReports = async () => {
+  const loadPreviousReports = useCallback(async () => {
     if (!report) return;
 
     try {
@@ -85,7 +78,14 @@ export const ReportDetailsModal = ({
     } catch (error) {
       console.error("Error loading previous reports:", error);
     }
-  };
+  }, [report]);
+
+  useEffect(() => {
+    if (isOpen && report) {
+      loadReporterData();
+      loadPreviousReports();
+    }
+  }, [isOpen, report, loadReporterData, loadPreviousReports]);
 
   const handleSaveNotes = async () => {
     if (!report) return;

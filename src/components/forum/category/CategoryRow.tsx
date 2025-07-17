@@ -33,7 +33,7 @@ export const CategoryRow = ({ category }: CategoryRowProps) => {
 
   return (
     <div className="group">
-      <Link to={`/category/${category.slug}`}>
+      <Link href={`/category/${category.slug}`}>
         <div className="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
             {/* Category Info */}

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
@@ -11,7 +10,7 @@ import {
   ListOrdered,
   Quote,
   Link,
-  Image,
+  Image as ImageIcon,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -94,30 +93,32 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
             setHasError(false);
             console.log("WysiwygEditor: Successfully initialized");
           } catch (error) {
+            const err = error as Error;
             console.error(
               "WysiwygEditor: Error initializing contentEditable:",
               error
             );
             setHasError(true);
             setUseFallback(true);
-            setErrorMessage(`Editor initialization failed: ${error.message}`);
+            setErrorMessage(`Editor initialization failed: ${err.message}`);
           }
         }
       } catch (error) {
+        const err = error as Error;
         console.error(
           "WysiwygEditor: Unexpected error during initialization:",
           error
         );
         setHasError(true);
         setUseFallback(true);
-        setErrorMessage(`Unexpected error: ${error.message}`);
+        setErrorMessage(`Unexpected error: ${err.message}`);
       } finally {
         setIsLoading(false);
       }
     };
 
     initializeEditor();
-  }, [value, isInitialized]);
+  }, [value, isInitialized, disabled, hideToolbar]);
 
   // Cursor position utilities
   const saveCursorPosition = useCallback(() => {
@@ -269,9 +270,10 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
         }
       }
     } catch (error) {
+      const err = error as Error;
       console.error("WysiwygEditor: Error in handleInput:", error);
       setHasError(true);
-      setErrorMessage(`Input error: ${error.message}`);
+      setErrorMessage(`Input error: ${err.message}`);
     }
   }, [editorContent, onChange, saveCursorPosition, debouncedCleanContent]);
 
@@ -281,11 +283,11 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
     onChange(newValue);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Let the browser handle all keyboard events naturally
-    // No custom handling that could interfere with text direction
-    return;
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent) => {
+  //   // Let the browser handle all keyboard events naturally
+  //   // No custom handling that could interfere with text direction
+  //   return;
+  // };
 
   const execCommand = useCallback(
     (command: string, value?: string) => {
@@ -303,13 +305,14 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
 
         handleInput();
       } catch (error) {
+        const err = error as Error;
         console.error(
           "WysiwygEditor: Error executing command:",
           command,
           error
         );
         setHasError(true);
-        setErrorMessage(`Command error: ${error.message}`);
+        setErrorMessage(`Command error: ${err.message}`);
       }
     },
     [useFallback, saveCursorPosition, restoreCursorPosition, handleInput]
@@ -532,7 +535,7 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
                 title="Insert Image"
                 disabled={disabled || useFallback}
               >
-                <Image className="h-4 w-4 mr-1" />
+                <ImageIcon className="h-4 w-4 mr-1" />
                 <span className="text-xs hidden sm:inline">Image</span>
               </Button>
             </>
@@ -577,7 +580,7 @@ export const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
               unicodeBidi: "plaintext",
             }}
             onInput={handleInput}
-            onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
             data-placeholder={placeholder}
             dir="ltr"
             suppressContentEditableWarning={true}

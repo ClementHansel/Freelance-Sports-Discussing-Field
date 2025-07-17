@@ -24,10 +24,10 @@ export const useGoogleAnalytics = () => {
   const trackingId = getSetting("google_analytics_id", "");
   const canTrack = hasConsent("analytics") && trackingId;
 
-  const buildPagePath = () => {
+  const buildPagePath = useCallback(() => {
     const search = searchParams?.toString();
     return search ? `${pathname}?${search}` : pathname;
-  };
+  }, [pathname, searchParams]);
 
   const trackPageView = useCallback(
     (customTitle?: string) => {
@@ -54,7 +54,7 @@ export const useGoogleAnalytics = () => {
         user_role: user?.role || "user",
       });
     },
-    [canTrack, trackingId, pathname, searchParams, user]
+    [canTrack, trackingId, buildPagePath, user]
   );
 
   const trackEvent = useCallback(

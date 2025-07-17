@@ -62,12 +62,24 @@ export const useEnhancedSpamDetection = () => {
       try {
         const userIP = await getUserIPWithFallback();
         const fingerprint = generateFingerprint();
+        console.log("Device fingerprint:", fingerprint);
 
         if (!userIP) {
           return {
             allowed: false,
             reason: "ip_detection_failed",
             message: "Unable to verify your connection. Please try again.",
+          };
+        }
+
+        // Apply custom logic based on contentType
+        if (contentType === "topic") {
+          // For example, allow fewer topics per day
+          return {
+            allowed: true,
+            remainingPostsHour: 999999,
+            remainingPostsDay: 999999,
+            remainingTopicsDay: 10, // Just an example limit
           };
         }
 

@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Pin, Lock, Flag } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { useAuth } from "@/hooks/useAuth";
 import { HotTopic } from "@/hooks/useHotTopics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { AdminControls } from "./AdminControls";
@@ -18,19 +17,19 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = React.memo(
   ({ topic, onReport }) => {
-    const { user } = useAuth();
     const isMobile = useIsMobile();
 
     // Generate the category URL for the clickable badge
     const categoryUrl = generateCategoryUrl({
       slug: topic.category_slug,
-      parent_category_id: topic.parent_category_id,
+      parent_category_id: topic.parent_category_id ?? undefined,
       parent_category: topic.parent_category_slug
         ? {
             slug: topic.parent_category_slug,
           }
         : undefined,
     });
+    PostCard.displayName = "PostCard";
 
     return (
       <div className="bg-card border-b border-border hover:bg-muted/50 transition-colors">

@@ -285,7 +285,9 @@ export const PostComponent: React.FC<PostComponentProps> = React.memo(
                 )}
 
                 {/* MAIN REPLY CONTENT - This is the user's actual response */}
-                <div className="text-foreground text-base font-normal bg-background p-3 rounded border-l-4 border-primary">
+                <div
+                  className={`${replyTextColor} text-base font-normal bg-background p-3 rounded border-l-4 border-primary`}
+                >
                   <HTMLRenderer content={post.content} />
                 </div>
 

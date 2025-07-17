@@ -42,7 +42,7 @@ export const HomePageSeoManager: React.FC = () => {
         og_image: getSetting("seo_home_og_image", ""),
       });
     }
-  }, [isLoading, settings]);
+  }, [isLoading, settings, getSetting]);
 
   const handleChange = (field: string, value: string) => {
     setSeoData((prev) => ({ ...prev, [field]: value }));

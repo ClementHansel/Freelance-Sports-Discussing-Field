@@ -12,7 +12,6 @@ interface AnonymousPostingNoticeProps {
 }
 
 export const AnonymousPostingNotice: React.FC<AnonymousPostingNoticeProps> = ({
-  remainingPosts,
   canPost,
   showRegistrationPrompt = true,
 }) => {

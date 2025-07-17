@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
 import { useToast } from "@/hooks/use-toast";
 import { AdminUser } from "@/hooks/useAdminUsers";
 import { supabase } from "@/components/integrations/supabase/client";
@@ -31,15 +30,7 @@ export const EditProfileModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (user) {
-      setUsername(user.username);
-      // Load full profile data
-      loadProfileData();
-    }
-  }, [user]);
-
-  const loadProfileData = async () => {
+  const loadProfileData = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -54,7 +45,14 @@ export const EditProfileModal = ({
     } catch (error) {
       console.error("Error loading profile:", error);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username);
+      loadProfileData();
+    }
+  }, [user, loadProfileData]);
 
   const handleSave = async () => {
     if (!user) return;

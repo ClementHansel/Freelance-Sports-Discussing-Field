@@ -7,7 +7,6 @@ import { useCategories } from "@/hooks/useCategories";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,

@@ -1,12 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Info, Trash2 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +17,7 @@ import { AdminPostInfo } from "../post/AdminPostInfo";
 import { AdminTopicInfo } from "../post/AdminTopicInfo";
 import { useDeletePost } from "@/hooks/useDeletePost";
 import { useDeleteTopic } from "@/hooks/useDeleteTopic";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface AdminControlsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

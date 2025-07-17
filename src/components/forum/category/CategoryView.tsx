@@ -18,7 +18,6 @@ import {
 import { useCategoriesByActivity } from "@/hooks/useCategoriesByActivity";
 import { useCategoryById, useCategoryBySlug } from "@/hooks/useCategories";
 import { useTopicsLegacy as useTopics } from "@/hooks/useTopicsLegacy";
-import { useAuth } from "@/hooks/useAuth";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import { formatDistanceToNow } from "date-fns";
 import { QuickTopicModal } from "./QuickTopicModal";
@@ -88,8 +87,6 @@ export const CategoryView = () => {
   const categoryId = segments[1] || "";
   const categorySlug = segments[1] || "";
   const subcategorySlug = segments[2] || "";
-
-  const { user } = useAuth();
 
   const isUUID =
     categoryId &&

@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/components/integrations/supabase/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Upload, X } from "lucide-react";
+import Image from "next/image";
 
 interface EditProfileModalProps {
   open: boolean;
@@ -219,10 +220,31 @@ export const EditProfileModal = ({
             <div className="flex items-center space-x-4">
               {/* Avatar Preview */}
               <div className="w-16 h-16 rounded-full overflow-hidden bg-muted flex items-center justify-center">
-                {previewUrl || formData.avatar_url ? (
-                  <img
-                    src={previewUrl || formData.avatar_url}
+                {previewUrl ? (
+                  previewUrl.startsWith("blob:") ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={previewUrl}
+                        alt="Avatar preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </>
+                  ) : (
+                    <Image
+                      src={previewUrl}
+                      alt="Avatar preview"
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
+                  )
+                ) : formData.avatar_url ? (
+                  <Image
+                    src={formData.avatar_url}
                     alt="Avatar preview"
+                    width={64}
+                    height={64}
                     className="w-full h-full object-cover"
                   />
                 ) : (

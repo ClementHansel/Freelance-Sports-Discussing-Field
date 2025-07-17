@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Pagination,
   PaginationContent,
@@ -7,8 +7,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+} from "@/components/ui/pagination";
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -25,7 +24,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   totalItems,
   itemsPerPage,
   onPageChange,
-  loading = false
+  loading = false,
 }) => {
   if (totalPages <= 1) return null;
 
@@ -35,21 +34,36 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   const generatePageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
       if (currentPage <= 3) {
-        pages.push(1, 2, 3, 4, '...', totalPages);
+        pages.push(1, 2, 3, 4, "...", totalPages);
       } else if (currentPage >= totalPages - 2) {
-        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        pages.push(
+          1,
+          "...",
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages
+        );
       } else {
-        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        pages.push(
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages
+        );
       }
     }
-    
+
     return pages;
   };
 
@@ -64,30 +78,32 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
       <div className="text-sm text-muted-foreground">
         Showing {startItem}-{endItem} of {totalItems} items
       </div>
-      
+
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious 
+            <PaginationPrevious
               onClick={() => handlePageClick(currentPage - 1)}
               className={`${
-                currentPage <= 1 || loading 
-                  ? 'pointer-events-none opacity-50' 
-                  : 'cursor-pointer hover:bg-accent'
+                currentPage <= 1 || loading
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer hover:bg-accent"
               }`}
             />
           </PaginationItem>
 
           {generatePageNumbers().map((page, index) => (
             <PaginationItem key={index}>
-              {page === '...' ? (
+              {page === "..." ? (
                 <PaginationEllipsis />
               ) : (
                 <PaginationLink
                   onClick={() => handlePageClick(page as number)}
                   isActive={currentPage === page}
                   className={`cursor-pointer ${
-                    loading ? 'pointer-events-none opacity-50' : 'hover:bg-accent'
+                    loading
+                      ? "pointer-events-none opacity-50"
+                      : "hover:bg-accent"
                   }`}
                 >
                   {page}
@@ -97,12 +113,12 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           ))}
 
           <PaginationItem>
-            <PaginationNext 
+            <PaginationNext
               onClick={() => handlePageClick(currentPage + 1)}
               className={`${
-                currentPage >= totalPages || loading 
-                  ? 'pointer-events-none opacity-50' 
-                  : 'cursor-pointer hover:bg-accent'
+                currentPage >= totalPages || loading
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer hover:bg-accent"
               }`}
             />
           </PaginationItem>

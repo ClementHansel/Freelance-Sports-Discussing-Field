@@ -1,8 +1,13 @@
-
-import React from 'react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { useCategories } from '@/hooks/useCategories';
+import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { useCategories } from "@/hooks/useCategories";
 
 interface SmartCategorySelectorProps {
   value: string;
@@ -11,11 +16,10 @@ interface SmartCategorySelectorProps {
   required?: boolean;
 }
 
-export const SmartCategorySelector = ({ 
-  value, 
-  onChange, 
-  currentCategoryId,
-  required = false 
+export const SmartCategorySelector = ({
+  value,
+  onChange,
+  required = false,
 }: SmartCategorySelectorProps) => {
   // Get Level 3 categories (the ones that can have topics)
   const { data: level3Categories, isLoading } = useCategories(undefined, 3);
@@ -29,13 +33,15 @@ export const SmartCategorySelector = ({
         </SelectTrigger>
         <SelectContent>
           {isLoading ? (
-            <SelectItem value="loading" disabled>Loading categories...</SelectItem>
+            <SelectItem value="loading" disabled>
+              Loading categories...
+            </SelectItem>
           ) : (
             level3Categories?.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 <div className="flex items-center space-x-2">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
+                  <div
+                    className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: category.color }}
                   />
                   <span>{category.name}</span>

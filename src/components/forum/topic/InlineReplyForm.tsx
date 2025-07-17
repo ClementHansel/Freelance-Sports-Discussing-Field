@@ -69,11 +69,26 @@ export const InlineReplyForm: React.FC<InlineReplyFormProps> = ({
     }
 
     try {
+      // Spam analysis before submission
+      const spamCheck = await analyzeContent(content);
+      if (spamCheck.allowed) {
+        toast({
+          title: "Spam Detected",
+          description:
+            "Your post appears to be spam. Please revise your message.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Submit the post
       const newPost = await createPostMutation.mutateAsync({
         content,
         topic_id: topicId,
         parent_post_id: parentPostId,
       });
+
+      console.log("New post created:", newPost);
 
       if (!user) {
         await tempUser.recordPost();

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from "react";
 
 interface RateLimitConfig {
   maxAttempts: number;
@@ -14,9 +14,9 @@ interface RateLimitState {
 
 export const useRateLimit = (key: string, config: RateLimitConfig) => {
   const { maxAttempts, windowMs, blockDurationMs = 60000 } = config;
-  
+
   const getStorageKey = (key: string) => `rate_limit_${key}`;
-  
+
   const getRateLimitState = useCallback((): RateLimitState => {
     try {
       const stored = localStorage.getItem(getStorageKey(key));
@@ -24,22 +24,25 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
         return JSON.parse(stored);
       }
     } catch (error) {
-      console.warn('Failed to parse rate limit state:', error);
+      console.warn("Failed to parse rate limit state:", error);
     }
     return { attempts: 0, lastAttempt: 0 };
   }, [key]);
 
-  const setRateLimitState = useCallback((state: RateLimitState) => {
-    try {
-      localStorage.setItem(getStorageKey(key), JSON.stringify(state));
-    } catch (error) {
-      console.warn('Failed to save rate limit state:', error);
-    }
-  }, [key]);
+  const setRateLimitState = useCallback(
+    (state: RateLimitState) => {
+      try {
+        localStorage.setItem(getStorageKey(key), JSON.stringify(state));
+      } catch (error) {
+        console.warn("Failed to save rate limit state:", error);
+      }
+    },
+    [key]
+  );
 
-  const checkRateLimit = useCallback((): { 
-    allowed: boolean; 
-    remainingAttempts: number; 
+  const checkRateLimit = useCallback((): {
+    allowed: boolean;
+    remainingAttempts: number;
     resetTime?: number;
     blockedUntil?: number;
   } => {
@@ -51,7 +54,7 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
       return {
         allowed: false,
         remainingAttempts: 0,
-        blockedUntil: state.blockedUntil
+        blockedUntil: state.blockedUntil,
       };
     }
 
@@ -62,7 +65,7 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
       return {
         allowed: true,
         remainingAttempts: maxAttempts - 1,
-        resetTime: now + windowMs
+        resetTime: now + windowMs,
       };
     }
 
@@ -71,25 +74,31 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
       return {
         allowed: true,
         remainingAttempts: maxAttempts - state.attempts - 1,
-        resetTime: state.lastAttempt + windowMs
+        resetTime: state.lastAttempt + windowMs,
       };
     }
 
     // Rate limit exceeded, block user
     const blockedUntil = now + blockDurationMs;
-    const newState = { 
-      ...state, 
+    const newState = {
+      ...state,
       blockedUntil,
-      lastAttempt: now 
+      lastAttempt: now,
     };
     setRateLimitState(newState);
 
     return {
       allowed: false,
       remainingAttempts: 0,
-      blockedUntil
+      blockedUntil,
     };
-  }, [key, maxAttempts, windowMs, blockDurationMs, getRateLimitState, setRateLimitState]);
+  }, [
+    maxAttempts,
+    windowMs,
+    blockDurationMs,
+    getRateLimitState,
+    setRateLimitState,
+  ]);
 
   const recordAttempt = useCallback((): boolean => {
     const now = Date.now();
@@ -109,9 +118,9 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
 
     // Increment attempts
     const newAttempts = state.attempts + 1;
-    let newState: RateLimitState = { 
-      attempts: newAttempts, 
-      lastAttempt: now 
+    const newState: RateLimitState = {
+      attempts: newAttempts,
+      lastAttempt: now,
     };
 
     // Block if exceeded limit
@@ -121,7 +130,13 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
 
     setRateLimitState(newState);
     return newAttempts <= maxAttempts;
-  }, [key, maxAttempts, windowMs, blockDurationMs, getRateLimitState, setRateLimitState]);
+  }, [
+    maxAttempts,
+    windowMs,
+    blockDurationMs,
+    getRateLimitState,
+    setRateLimitState,
+  ]);
 
   const resetRateLimit = useCallback(() => {
     localStorage.removeItem(getStorageKey(key));
@@ -130,6 +145,6 @@ export const useRateLimit = (key: string, config: RateLimitConfig) => {
   return {
     checkRateLimit,
     recordAttempt,
-    resetRateLimit
+    resetRateLimit,
   };
 };

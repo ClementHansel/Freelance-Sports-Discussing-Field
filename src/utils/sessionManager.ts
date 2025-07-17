@@ -128,7 +128,7 @@ class SessionManager {
       const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
       return data.ip || "127.0.0.1";
-    } catch (error) {
+    } catch {
       console.warn("Failed to get real IP, using fallback");
       const userAgent = navigator.userAgent;
       const timestamp = Date.now();
@@ -155,7 +155,7 @@ class SessionManager {
       await supabase.rpc("record_enhanced_anonymous_activity", {
         user_ip: clientIP,
         p_session_id: this.sessionId,
-        p_fingerprint_hash: null,
+        p_fingerprint_hash: undefined,
         p_content_type: "post",
       });
 

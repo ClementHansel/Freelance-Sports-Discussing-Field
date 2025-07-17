@@ -13,9 +13,6 @@ interface CategoryRequestData {
 }
 
 export const useCategoryRequests = () => {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
   const { data: requests, isLoading } = useQuery({
     queryKey: ["category-requests"],
     queryFn: async () => {

@@ -15,7 +15,7 @@ interface CreatePostData {
 export const useCreatePost = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const { checkRateLimit, analyzeContent } = useEnhancedSpamDetection();
+  const { analyzeContent } = useEnhancedSpamDetection();
 
   return useMutation({
     mutationFn: async (data: CreatePostData) => {
@@ -157,7 +157,7 @@ export const useCreatePost = () => {
 
       return post;
     },
-    onSuccess: (post, variables) => {
+    onSuccess: (post) => {
       // Show appropriate success message based on moderation status
       if (post.moderation_status === "pending") {
         // This will be shown via toast in the component that calls this hook

@@ -76,6 +76,8 @@ export const useDeleteTopic = () => {
         title: "Topic deleted",
         description: "The topic has been successfully deleted.",
       });
+
+      console.log("Deleted topic:", deletedTopic); // Optional debug
     },
     onError: (error) => {
       toast({

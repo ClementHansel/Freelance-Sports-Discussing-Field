@@ -48,18 +48,6 @@ interface ContentAnalysis {
   created_at: string;
 }
 
-interface AnonymousTracking {
-  id: string;
-  ip_address: string;
-  session_id: string;
-  post_count: number;
-  topic_count: number;
-  is_blocked: boolean;
-  block_reason?: string;
-  last_post_at: string;
-  created_at: string;
-}
-
 export const SpamManagement = () => {
   const [selectedTab, setSelectedTab] = useState("reports");
   const [selectedIP, setSelectedIP] = useState<string | null>(null);

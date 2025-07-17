@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -85,14 +85,7 @@ export const ReportModal = ({
   const { toast } = useToast();
   const { user } = useAuth();
 
-  // Check previous reports and reporter behavior when modal opens
-  useEffect(() => {
-    if (isOpen && (postId || topicId)) {
-      checkReportStatus();
-    }
-  }, [isOpen, postId, topicId]);
-
-  const checkReportStatus = async () => {
+  const checkReportStatus = useCallback(async () => {
     setIsLoading(true);
     try {
       // Check if content was previously approved
@@ -142,7 +135,14 @@ export const ReportModal = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [postId, topicId, contentType, user?.id, toast, onClose]);
+
+  // Check previous reports and reporter behavior when modal opens
+  useEffect(() => {
+    if (isOpen && (postId || topicId)) {
+      checkReportStatus();
+    }
+  }, [isOpen, postId, topicId, checkReportStatus]);
 
   const handleSubmit = async () => {
     if (!reason.trim()) {

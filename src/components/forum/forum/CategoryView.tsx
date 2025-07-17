@@ -18,10 +18,8 @@ import {
 import { useCategoriesByActivity } from "@/hooks/useCategoriesByActivity";
 import { useCategoryById, useCategoryBySlug } from "@/hooks/useCategories";
 import { useTopicsLegacy as useTopics } from "@/hooks/useTopicsLegacy";
-import { useAuth } from "@/hooks/useAuth";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import { formatDistanceToNow } from "date-fns";
-
 import { CategoryRequestModal } from "../category/CategoryRequestModal";
 import { AdminControls } from "./AdminControls";
 import {
@@ -92,7 +90,10 @@ export const CategoryView = () => {
 
   // Handle both legacy UUID routing and new slug routing
   const isLegacyRoute = !!categoryId;
-  const { user } = useAuth();
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("Routing mode:", isLegacyRoute ? "Legacy UUID" : "Slug-based");
+  }
 
   // Check if categoryId is a UUID (proper UUID format: 8-4-4-4-12 characters)
   const isUUID =
@@ -170,6 +171,14 @@ export const CategoryView = () => {
     );
   }
 
+  if (categoryError) {
+    return (
+      <div className="text-red-500 p-4">
+        Failed to load category: {categoryError.message || "Unknown error."}
+      </div>
+    );
+  }
+
   // Determine if we should show subcategories or topics
   const hasSubcategories = subcategories && subcategories.length > 0;
   const isLevel3Category = category?.level === 3; // Only Level 3 categories can have topics
@@ -234,7 +243,7 @@ export const CategoryView = () => {
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
               {/* Show different content based on category level and moderation requirements */}
-              {category.level === 3 ||
+              {isLevel3Category ||
               (category.level === 2 && !category.requires_moderation) ? (
                 // Level 3 categories and level 2 categories without moderation allow topic creation
                 <>
@@ -327,11 +336,16 @@ export const CategoryView = () => {
               />
             </div>
           </div>
-          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
-            {subcategories.map((subcat) => (
-              <SubcategoryCard key={subcat.id} subcat={subcat} />
-            ))}
-          </div>
+
+          {hasSubcategories && subcategoriesLoading ? (
+            <div>Loading subcategories...</div>
+          ) : (
+            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+              {subcategories.map((subcat) => (
+                <SubcategoryCard key={subcat.id} subcat={subcat} />
+              ))}
+            </div>
+          )}
         </>
       ) : category ? (
         <>
@@ -385,34 +399,37 @@ export const CategoryView = () => {
                           <span className="hidden sm:inline">•</span>
                           <span>
                             Created{" "}
-                            {formatDistanceToNow(new Date(topic.created_at))}{" "}
+                            {topic.created_at
+                              ? formatDistanceToNow(new Date(topic.created_at))
+                              : "unknown time"}{" "}
                             ago
                           </span>
-                          {topic.last_reply_at && topic.reply_count > 0 && (
-                            <>
-                              <span>•</span>
-                              {topic.last_post_id ? (
-                                <Link
-                                  to={`/${category.slug}/${topic.slug}#post-${topic.last_post_id}`}
-                                  className="hover:text-primary transition-colors"
-                                >
-                                  Last reply{" "}
-                                  {formatDistanceToNow(
-                                    new Date(topic.last_reply_at)
-                                  )}{" "}
-                                  ago
-                                </Link>
-                              ) : (
-                                <span>
-                                  Last reply{" "}
-                                  {formatDistanceToNow(
-                                    new Date(topic.last_reply_at)
-                                  )}{" "}
-                                  ago
-                                </span>
-                              )}
-                            </>
-                          )}
+                          {topic.last_reply_at &&
+                            (topic.reply_count ?? 0) > 0 && (
+                              <>
+                                <span>•</span>
+                                {topic.last_post_id ? (
+                                  <Link
+                                    href={`/${category.slug}/${topic.slug}#post-${topic.last_post_id}`}
+                                    className="hover:text-primary transition-colors"
+                                  >
+                                    Last reply{" "}
+                                    {formatDistanceToNow(
+                                      new Date(topic.last_reply_at)
+                                    )}{" "}
+                                    ago
+                                  </Link>
+                                ) : (
+                                  <span>
+                                    Last reply{" "}
+                                    {formatDistanceToNow(
+                                      new Date(topic.last_reply_at)
+                                    )}{" "}
+                                    ago
+                                  </span>
+                                )}
+                              </>
+                            )}
                         </div>
                       </div>
                     </div>

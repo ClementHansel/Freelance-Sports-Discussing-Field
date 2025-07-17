@@ -66,7 +66,9 @@ export const useDeletePost = () => {
       queryClient.invalidateQueries({ queryKey: ["topic"] });
       toast({
         title: "Post deleted",
-        description: "The post has been successfully deleted.",
+        description: deletedPost?.content
+          ? `"${deletedPost.content.slice(0, 50)}..." was successfully deleted.`
+          : "The post has been successfully deleted.",
       });
     },
     onError: (error) => {

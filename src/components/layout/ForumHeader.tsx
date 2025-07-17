@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Bell, User, Settings, Shield, Menu } from "lucide-react";
+import { Search, Bell, User, Shield, Menu } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SharedMenuContent } from "../forum/forum/SharedMenuContent";

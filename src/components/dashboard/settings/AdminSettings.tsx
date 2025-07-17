@@ -76,7 +76,7 @@ const AdminSettings = () => {
       setBannerMessage(bannerMessageValue);
       setForumDescription(forumDescriptionValue);
     }
-  }, [settings]); // Removed getSetting from dependencies as it changes on every render
+  }, [settings, getSetting]);
 
   const handleSaveGeneral = async () => {
     updateSetting({

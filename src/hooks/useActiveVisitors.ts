@@ -68,10 +68,19 @@ export const useRealtimeVisitorUpdates = (
         schema: "public",
         table: "ip_visit_tracking",
       },
-      (payload) => {
+      async (payload) => {
         console.log("New visitor activity:", payload);
         // Trigger refetch of active visitors
         // This will be handled by the query invalidation
+        // Fetch updated list of active visitors
+
+        const { data, error } = await supabase.rpc("get_active_visitors");
+
+        if (!error && data) {
+          onVisitorUpdate(data as ActiveVisitor[]);
+        } else {
+          console.error("Failed to fetch updated visitors", error);
+        }
       }
     )
     .subscribe();

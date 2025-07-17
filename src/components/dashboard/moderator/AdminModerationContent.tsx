@@ -5,14 +5,8 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQueryClient } from "@tanstack/react-query";
-
 import { AlertTriangle, Ban, Users, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-// Import new components
-
-// Assuming these hooks will be created to encapsulate logic
-
 import { CategoryRequestsManager } from "@/components/dashboard/moderator/CategoryRequestsManager";
 import { ModerationItemDetailsModal } from "@/components/dashboard/moderator/ModerationItemDetailsModal";
 import { ReportDetailsModal } from "@/components/dashboard/moderator/ReportDetailsModal";
@@ -22,7 +16,6 @@ import {
   useApproveModerationItem,
   useBanIPModeration,
   useBanUserModeration,
-  useDeleteModerationItem,
   useRejectModerationItem,
 } from "@/hooks/moderation/useModerationActions";
 
@@ -44,26 +37,13 @@ interface ModerationItem {
   topic_slug?: string;
 }
 
-// Assuming Report interface exists from ReportDetailsModal
-interface Report {
-  id: string;
-  type: "topic" | "post";
-  content_id: string;
-  reason: string;
-  reporter_id: string;
-  created_at: string;
-  status: "pending" | "resolved" | "dismissed";
-  admin_notes: string | null;
-  // Add more fields as per your report structure
-}
-
 export const AdminModerationContent = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   // State for modals
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [selectedReport] = useState<Report | null>(null);
 
   const [isModerationModalOpen, setIsModerationModalOpen] = useState(false);
   const [selectedModerationItem, setSelectedModerationItem] =
@@ -79,12 +59,6 @@ export const AdminModerationContent = () => {
   const rejectMutation = useRejectModerationItem();
   const banUserMutation = useBanUserModeration();
   const banIPMutation = useBanIPModeration();
-  const deleteMutation = useDeleteModerationItem();
-
-  const handleOpenReportModal = (report: Report) => {
-    setSelectedReport(report);
-    setIsReportModalOpen(true);
-  };
 
   const handleOpenModerationItemModal = (item: ModerationItem) => {
     setSelectedModerationItem(item);
@@ -178,27 +152,6 @@ export const AdminModerationContent = () => {
       toast({
         title: "Error",
         description: error.message || "Failed to ban IP",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleDelete = async (id: string, type: "topic" | "post") => {
-    try {
-      await deleteMutation.mutateAsync({ id, type });
-      toast({
-        title: "Content Deleted",
-        description: `The ${type} has been permanently deleted.`,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["moderationItems", "pending"],
-      });
-      setIsModerationModalOpen(false);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || `Failed to delete ${type}`,
         variant: "destructive",
       });
     }

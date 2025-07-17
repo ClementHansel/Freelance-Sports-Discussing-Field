@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Clock, Star, Home, Rss, User } from "lucide-react";
 import { useCategoriesByActivity } from "@/hooks/useCategoriesByActivity";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
-import { useEnhancedForumStats } from "@/hooks/useEnhancedForumStats";
 import { SidebarAdBanner } from "@/components/ads/SidebarAdBanner";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +41,6 @@ const CategoryItem = ({ category }: { category: any }) => {
 export const ForumSidebarNav = () => {
   const pathname = usePathname();
   const { data: categories } = useCategoriesByActivity();
-  const { data: forumStats } = useEnhancedForumStats();
 
   const isActive = (path: string) => pathname === path;
 

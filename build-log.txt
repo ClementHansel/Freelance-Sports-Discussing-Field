@@ -6,146 +6,19 @@
    ▲ Next.js 15.4.1
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 11.0s
+ ✓ Compiled successfully in 13.0s
    Linting and checking validity of types ...
 
 Failed to compile.
 
-./src/components/analytics/EnhancedHeaderCodeInjector.tsx
-21:7  Warning: The 'headerScripts' array makes the dependencies of useEffect Hook (at line 119) change on every render. To fix this, wrap the initialization of 'headerScripts' in its own useMemo() Hook.  react-hooks/exhaustive-deps
-
-./src/components/dashboard/admin/seo/tabs/HomePageSeoManager.tsx
-45:6  Warning: React Hook React.useEffect has a missing dependency: 'getSetting'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/components/dashboard/moderator/AdminModerationContent.tsx
-84:9  Warning: 'handleOpenReportModal' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-186:9  Warning: 'handleDelete' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/dashboard/moderator/ReportDetailsModal.tsx
-57:6  Warning: React Hook useEffect has missing dependencies: 'loadPreviousReports' and 'loadReporterData'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/components/dashboard/moderator/spam/IPActivityDetails.tsx
-6:3  Warning: 'Table' is defined but never used.  @typescript-eslint/no-unused-vars
-7:3  Warning: 'TableBody' is defined but never used.  @typescript-eslint/no-unused-vars
-8:3  Warning: 'TableCell' is defined but never used.  @typescript-eslint/no-unused-vars
-9:3  Warning: 'TableHead' is defined but never used.  @typescript-eslint/no-unused-vars
-10:3  Warning: 'TableHeader' is defined but never used.  @typescript-eslint/no-unused-vars
-11:3  Warning: 'TableRow' is defined but never used.  @typescript-eslint/no-unused-vars
-13:10  Warning: 'Tabs' is defined but never used.  @typescript-eslint/no-unused-vars
-13:16  Warning: 'TabsContent' is defined but never used.  @typescript-eslint/no-unused-vars
-13:29  Warning: 'TabsList' is defined but never used.  @typescript-eslint/no-unused-vars
-13:39  Warning: 'TabsTrigger' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/dashboard/moderator/spam/SpamManagement.tsx
-51:11  Warning: 'AnonymousTracking' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/dashboard/settings/AdminSettings.tsx
-79:6  Warning: React Hook React.useEffect has a missing dependency: 'getSetting'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/components/dashboard/user/profile/EditProfileModal.tsx
-40:6  Warning: React Hook useEffect has a missing dependency: 'loadProfileData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/components/forum/category/Categories.tsx
-10:3  Warning: 'BreadcrumbEllipsis' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/category/CategoryRequestModal.tsx
-8:10  Warning: 'Select' is defined but never used.  @typescript-eslint/no-unused-vars
-8:18  Warning: 'SelectContent' is defined but never used.  @typescript-eslint/no-unused-vars
-8:33  Warning: 'SelectItem' is defined but never used.  @typescript-eslint/no-unused-vars
-8:45  Warning: 'SelectTrigger' is defined but never used.  @typescript-eslint/no-unused-vars
-8:60  Warning: 'SelectValue' is defined but never used.  @typescript-eslint/no-unused-vars
-10:10  Warning: 'useAuth' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/category/CategoryView.tsx
-92:11  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/category/HierarchicalCategorySelector.tsx
-20:3  Warning: 'required' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-37:17  Warning: 'allLevel3Categories' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/category/QuickTopicModal.tsx
-16:3  Warning: 'BreadcrumbLink' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/category/SmartCategorySelector.tsx
-17:3  Warning: 'currentCategoryId' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/forum/AdminControls.tsx
-3:10  Warning: 'Info' is defined but never used.  @typescript-eslint/no-unused-vars
-5:3  Warning: 'Tooltip' is defined but never used.  @typescript-eslint/no-unused-vars
-6:3  Warning: 'TooltipContent' is defined but never used.  @typescript-eslint/no-unused-vars
-8:3  Warning: 'TooltipTrigger' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/forum/CategoryView.tsx
-94:9  Warning: 'isLegacyRoute' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-95:11  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-130:5  Warning: 'categoryError' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-132:43  Warning: 'subcategoriesLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-175:9  Warning: 'isLevel3Category' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/forum/PostCard.tsx
-19:50  Error: Component definition is missing display name  react/display-name
-21:13  Warning: 'user' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/forum/forum/ReportModal.tsx
-93:6  Warning: React Hook useEffect has a missing dependency: 'checkReportStatus'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/components/forum/post/AnonymousPostingNotice.tsx
-15:3  Warning: 'remainingPosts' is defined but never used.  @typescript-eslint/no-unused-vars
-
 ./src/components/forum/topic/InlineReplyForm.tsx
-39:11  Warning: 'analyzeContent' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-72:13  Warning: 'newPost' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+82:13  Warning: 'newPost' is assigned a value but never used.  @typescript-eslint/no-unused-vars
 
 ./src/components/forum/topic/PostComponent.tsx
 204:11  Warning: 'replyTextColor' is assigned a value but never used.  @typescript-eslint/no-unused-vars
 
-./src/components/forum/topic/TopicView.tsx
-108:9  Warning: The 'posts' logical expression could make the dependencies of useEffect Hook (at line 304) change on every render. To fix this, wrap the initialization of 'posts' in its own useMemo() Hook.  react-hooks/exhaustive-deps
-
-./src/components/layout/Footer.tsx
-45:15  Warning: 'data' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/layout/ForumHeader.tsx
-7:30  Warning: 'Settings' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/layout/ForumLayout.tsx
-7:10  Warning: 'ForumStats' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/layout/ForumSidebarNav.tsx
-9:35  Warning: 'Plus' is defined but never used.  @typescript-eslint/no-unused-vars
-9:47  Warning: 'Users' is defined but never used.  @typescript-eslint/no-unused-vars
-45:17  Warning: 'forumStats' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
 ./src/components/profile/EditProfileModal.tsx
-223:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
-
-./src/components/ui/calendar.tsx
-55:25  Warning: '_props' is defined but never used.  @typescript-eslint/no-unused-vars
-56:26  Warning: '_props' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/ui/chart.tsx
-70:7  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/ui/command.tsx
-24:11  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
-
-./src/components/ui/pagination-controls.tsx
-11:10  Warning: 'ChevronLeft' is defined but never used.  @typescript-eslint/no-unused-vars
-11:23  Warning: 'ChevronRight' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/components/ui/textarea.tsx
-5:18  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
-
-./src/components/ui/wysiwyg-editor.tsx
-3:10  Warning: 'Input' is defined but never used.  @typescript-eslint/no-unused-vars
-120:6  Warning: React Hook useEffect has missing dependencies: 'disabled' and 'hideToolbar'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
-284:26  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
-535:17  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
-
-./src/contexts/OnlineUsersContext.tsx
-67:62  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-68:44  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-104:44  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+224:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
 ./src/hooks/use-toast.ts
 16:7  Warning: 'actionTypes' is assigned a value but only used as a type.  @typescript-eslint/no-unused-vars
@@ -153,32 +26,12 @@ Failed to compile.
 ./src/hooks/useActiveVisitors.ts
 59:3  Warning: 'onVisitorUpdate' is defined but never used.  @typescript-eslint/no-unused-vars
 
-./src/hooks/useCategoryRequests.ts
-16:11  Warning: 'toast' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-17:9  Warning: 'queryClient' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/hooks/useCreatePost.ts
-18:11  Warning: 'checkRateLimit' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-160:23  Warning: 'variables' is defined but never used.  @typescript-eslint/no-unused-vars
-
 ./src/hooks/useDeletePost.ts
 64:17  Warning: 'deletedPost' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/hooks/useDeleteTopic.ts
-71:17  Warning: 'deletedTopic' is defined but never used.  @typescript-eslint/no-unused-vars
 
 ./src/hooks/useEnhancedSpamDetection.ts
 58:7  Warning: 'contentType' is assigned a value but never used.  @typescript-eslint/no-unused-vars
 64:15  Warning: 'fingerprint' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-
-./src/hooks/useGoogleAnalytics.ts
-57:5  Warning: React Hook useCallback has a missing dependency: 'buildPagePath'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
-
-./src/hooks/useRateLimit.ts
-1:10  Warning: 'useState' is defined but never used.  @typescript-eslint/no-unused-vars
-92:6  Warning: React Hook useCallback has an unnecessary dependency: 'key'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
-112:9  Error: 'newState' is never reassigned. Use 'const' instead.  prefer-const
-124:6  Warning: React Hook useCallback has an unnecessary dependency: 'key'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
 
 ./src/supabase/functions/send-contact-email/index.ts
 46:51  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
@@ -186,11 +39,5 @@ Failed to compile.
 
 ./src/supabase/functions/send-moderation-appeal/index.ts
 223:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/utils/anonymousUtils.ts
-48:12  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/utils/sessionManager.ts
-131:14  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
 
 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
