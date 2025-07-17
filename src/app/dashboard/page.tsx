@@ -25,6 +25,8 @@ export default function DashboardRootPage() {
         router.push("/dashboard/admin");
       } else if (role === "moderator") {
         router.push("/dashboard/moderator");
+      } else if (role === "moderator") {
+        router.push("/dashboard/content-editor");
       } else if (role === "staff") {
         router.push("/dashboard/staff");
       } else {

@@ -62,7 +62,7 @@ To report a post:
 
 Have a question or concern? Use the "Contact Us" link at the bottom of any page to reach out to the site administrators.`;
 
-export default function ForumRulesPage() {
+export default function ForumRulesEditorTab() {
   return (
     <InlineContentEditor
       settingKey="forum_rules_content"

@@ -30,12 +30,6 @@ export const InlineContentEditor: React.FC<InlineContentEditorProps> = ({
   const cleanHtmlForEditor = (htmlContent: string) => {
     if (!htmlContent) return "";
 
-    console.log(
-      "🧹 Cleaning HTML for editor. Original length:",
-      htmlContent.length
-    );
-
-    // Remove Tiptap editor metadata that can interfere with editing
     const cleaned = htmlContent
       .replace(/\s*data-start="[^"]*"/g, "")
       .replace(/\s*data-end="[^"]*"/g, "")
@@ -43,37 +37,12 @@ export const InlineContentEditor: React.FC<InlineContentEditorProps> = ({
       .replace(/\s*contenteditable="[^"]*"/g, "")
       .trim();
 
-    console.log("✨ Cleaned HTML length:", cleaned.length);
-    console.log(
-      "🔍 Cleaned content preview:",
-      cleaned.substring(0, 300) + "..."
-    );
-
     return cleaned;
   };
 
   const handleEdit = () => {
-    console.log("🎯 handleEdit called for settingKey:", settingKey);
-    console.log(
-      "📊 Raw content from getSetting:",
-      content ? "Content exists" : "No content"
-    );
-    console.log("📏 Raw content length:", content?.length || 0);
-
-    // Get the current content from database or fallback to default
     const rawContent = content || defaultContent;
     const cleanedContent = cleanHtmlForEditor(rawContent);
-
-    console.log("🔄 Loading content for editing:", {
-      settingKey,
-      hasRawContent: !!rawContent,
-      rawContentPreview: rawContent.substring(0, 200) + "...",
-      hasCleanedContent: !!cleanedContent,
-      cleanedContentPreview: cleanedContent.substring(0, 200) + "...",
-      rawLength: rawContent.length,
-      cleanedLength: cleanedContent.length,
-    });
-
     setEditContent(cleanedContent);
     setIsEditing(true);
   };
@@ -107,7 +76,7 @@ export const InlineContentEditor: React.FC<InlineContentEditorProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">{title}</h1>
         {canViewAdminPanel && !isEditing && (
@@ -124,32 +93,43 @@ export const InlineContentEditor: React.FC<InlineContentEditorProps> = ({
       </div>
 
       {isEditing ? (
-        <div className="space-y-4">
-          <WysiwygEditor
-            value={editContent}
-            onChange={setEditContent}
-            height={400}
-            placeholder={`Enter ${title.toLowerCase()} content here...`}
-            allowImages={true}
-          />
-          <div className="flex gap-2">
-            <Button
-              onClick={handleSave}
-              disabled={isUpdating}
-              className="gap-2"
-            >
-              <Save className="h-4 w-4" />
-              {isUpdating ? "Saving..." : "Save Changes"}
-            </Button>
-            <Button
-              onClick={handleCancel}
-              variant="outline"
-              disabled={isUpdating}
-              className="gap-2"
-            >
-              <X className="h-4 w-4" />
-              Cancel
-            </Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Editor */}
+          <div>
+            <WysiwygEditor
+              value={editContent}
+              onChange={setEditContent}
+              height={400}
+              placeholder={`Enter ${title.toLowerCase()} content here...`}
+              allowImages={true}
+            />
+            <div className="flex gap-2 mt-4">
+              <Button
+                onClick={handleSave}
+                disabled={isUpdating}
+                className="gap-2"
+              >
+                <Save className="h-4 w-4" />
+                {isUpdating ? "Saving..." : "Save Changes"}
+              </Button>
+              <Button
+                onClick={handleCancel}
+                variant="outline"
+                disabled={isUpdating}
+                className="gap-2"
+              >
+                <X className="h-4 w-4" />
+                Cancel
+              </Button>
+            </div>
+          </div>
+
+          {/* Live Preview */}
+          <div>
+            <h2 className="text-lg font-semibold mb-2">Live Preview</h2>
+            <div className="prose prose-slate max-w-none border rounded p-4 bg-white shadow overflow-auto h-[400px]">
+              <HTMLRenderer content={editContent} />
+            </div>
           </div>
         </div>
       ) : (

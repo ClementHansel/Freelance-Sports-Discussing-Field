@@ -35,12 +35,7 @@ const NAV_ITEMS = [
     icon: Users,
     roles: ["admin", "superadmin"],
   },
-  {
-    path: "/dashboard/staff/content",
-    label: "Content",
-    icon: MessageSquare,
-    roles: ["staff", "superadmin"],
-  },
+
   {
     path: "/dashboard/moderator",
     label: "Moderation",
@@ -48,10 +43,22 @@ const NAV_ITEMS = [
     roles: ["moderator", "superadmin"],
   },
   {
-    path: "/dashboard/staff/spam",
+    path: "/dashboard/content",
+    label: "Content Management",
+    icon: AlertTriangle,
+    roles: ["moderator", "superadmin"],
+  },
+  {
+    path: "/dashboard/content-editor",
+    label: "Content Editor",
+    icon: MessageSquare,
+    roles: ["moderator", "superadmin"],
+  },
+  {
+    path: "/dashboard/spam",
     label: "Spam Management",
     icon: AlertTriangle,
-    roles: ["staff", "superadmin"],
+    roles: ["moderator", "superadmin"],
   },
   {
     path: "/dashboard/admin/ads",
