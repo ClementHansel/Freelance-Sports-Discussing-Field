@@ -74,14 +74,17 @@ export const ForumSidebar = () => {
                       variant="secondary"
                       className="text-xs"
                       style={{
-                        borderColor: topic.categories?.color,
-                        color: topic.categories?.color,
+                        borderColor: topic.categories?.color ?? undefined,
+                        color: topic.categories?.color ?? undefined,
                       }}
                     >
                       {topic.categories?.name}
                     </Badge>
                     <span className="text-xs text-gray-500">
-                      {formatDistanceToNow(new Date(topic.created_at))} ago
+                      {topic.created_at
+                        ? formatDistanceToNow(new Date(topic.created_at)) +
+                          " ago"
+                        : "Unknown time"}
                     </span>
                   </div>
                 </div>

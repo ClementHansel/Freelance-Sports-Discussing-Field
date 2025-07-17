@@ -169,7 +169,7 @@ export const Footer = () => {
             <h4 className="font-medium">Quick Links</h4>
             <div className="flex flex-col space-y-2 text-sm">
               <Link
-                href="/rules"
+                href="/forum-rules"
                 className="hover:text-primary transition-colors"
               >
                 Forum Rules
