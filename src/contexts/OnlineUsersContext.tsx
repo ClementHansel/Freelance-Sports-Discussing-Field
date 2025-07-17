@@ -5,6 +5,14 @@ import { sessionManager } from "@/utils/sessionManager";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/components/integrations/supabase/client";
 
+type PresenceUserStatus = {
+  user_id: string;
+  online_at: string;
+  is_authenticated: boolean;
+};
+
+type PresenceState = Record<string, PresenceUserStatus[]>;
+
 interface OnlineUsersContextType {
   onlineCount: number;
 }
@@ -64,11 +72,13 @@ export const OnlineUsersProvider: React.FC<{ children: React.ReactNode }> = ({
             const uniqueUsers = new Set();
 
             // Count unique users by their persistent ID
-            Object.values(presenceState).forEach((presences: any) => {
-              presences.forEach((presence: any) => {
-                uniqueUsers.add(presence.user_id);
-              });
-            });
+            Object.values(presenceState as PresenceState).forEach(
+              (presences: PresenceUserStatus[]) => {
+                presences.forEach((presence: PresenceUserStatus) => {
+                  uniqueUsers.add(presence.user_id);
+                });
+              }
+            );
 
             const count = uniqueUsers.size;
             console.log(
@@ -92,61 +102,64 @@ export const OnlineUsersProvider: React.FC<{ children: React.ReactNode }> = ({
                 });
             }
           })
-          .on("presence", { event: "join" }, ({ newPresences }) => {
-            if (!isSubscribed) return;
-            console.log("➕ User joined:", newPresences);
+          .on(
+            "presence",
+            { event: "join" },
+            (payload: { newPresences: PresenceUserStatus[] }) => {
+              const { newPresences } = payload;
+              console.log("➕ User joined:", newPresences);
 
-            const presenceState = channel.presenceState();
-            const uniqueUsers = new Set();
+              const presenceState = channel.presenceState();
+              const uniqueUsers = new Set();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            Object.values(presenceState).forEach((presences: any) => {
-              presences.forEach((presence: any) => {
-                uniqueUsers.add(presence.user_id);
-              });
-            });
+              Object.values(presenceState as PresenceState).forEach(
+                (presences: PresenceUserStatus[]) => {
+                  presences.forEach((presence: PresenceUserStatus) => {
+                    uniqueUsers.add(presence.user_id);
+                  });
+                }
+              );
 
-            const count = uniqueUsers.size;
-            console.log("👥 Online users count after join:", count);
-            setOnlineCount(count);
+              const count = uniqueUsers.size;
+              console.log("👥 Online users count after join:", count);
+              setOnlineCount(count);
 
-            // Update peak users if current count is higher
-            if (count > 0) {
-              supabase.rpc("update_peak_users", { current_count: count });
+              // Update peak users if current count is higher
+              if (count > 0) {
+                supabase.rpc("update_peak_users", { current_count: count });
+              }
             }
-          })
-          .on("presence", { event: "leave" }, ({ leftPresences }) => {
-            if (!isSubscribed) return;
-            console.log("➖ User left:", leftPresences);
+          )
+          .on(
+            "presence",
+            { event: "leave" },
+            (payload: { leftPresences: PresenceUserStatus[] }) => {
+              const { leftPresences } = payload;
+              console.log("➖ User left:", leftPresences);
 
-            const presenceState = channel.presenceState();
-            const uniqueUsers = new Set();
+              const presenceState = channel.presenceState();
+              const uniqueUsers = new Set();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            Object.values(presenceState).forEach((presences: any) => {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              presences.forEach((presence: any) => {
-                uniqueUsers.add(presence.user_id);
-              });
-            });
+              Object.values(presenceState as PresenceState).forEach(
+                (presences: PresenceUserStatus[]) => {
+                  presences.forEach((presence: PresenceUserStatus) => {
+                    uniqueUsers.add(presence.user_id);
+                  });
+                }
+              );
 
-            const count = uniqueUsers.size;
-            console.log("👥 Online users count after leave:", count);
-            setOnlineCount(count);
-          })
-          .subscribe(async (status) => {
-            console.log("📡 Channel status:", status);
-
+              const count = uniqueUsers.size;
+              console.log("👥 Online users count after leave:", count);
+              setOnlineCount(count);
+            }
+          )
+          .subscribe(async (status: string) => {
             if (status === "SUBSCRIBED") {
-              isSubscribed = true;
-
               const userStatus = {
                 user_id: userId,
                 online_at: new Date().toISOString(),
                 is_authenticated: !!user,
               };
-
-              console.log("🏷️ Tracking user presence:", userStatus);
 
               try {
                 const trackResult = await channel.track(userStatus);

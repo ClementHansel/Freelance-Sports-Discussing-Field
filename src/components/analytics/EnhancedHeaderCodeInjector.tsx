@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForumSettings } from "@/hooks/useForumSettings";
 import DOMPurify from "dompurify";
 
@@ -14,35 +14,31 @@ interface HeaderScript {
 export const EnhancedHeaderCodeInjector = () => {
   const { getSetting } = useForumSettings();
 
-  // Get both legacy header code and new header scripts
   const legacyHeaderCode = getSetting("header_code", "");
   const headerScriptsRaw = getSetting("header_scripts", "[]");
 
-  let headerScripts: HeaderScript[] = [];
-  try {
-    headerScripts =
-      headerScriptsRaw && headerScriptsRaw !== ""
-        ? JSON.parse(headerScriptsRaw)
-        : [];
-  } catch (error) {
-    console.error("Error parsing header scripts:", error);
-    headerScripts = [];
-  }
-
-  // Check if advertising is enabled
   const advertisingEnabled =
     getSetting("advertising_enabled", "true") === "true";
 
+  // Memoize parsed header scripts
+  const headerScripts: HeaderScript[] = useMemo(() => {
+    try {
+      return headerScriptsRaw && headerScriptsRaw !== ""
+        ? JSON.parse(headerScriptsRaw)
+        : [];
+    } catch (error) {
+      console.error("Error parsing header scripts:", error);
+      return [];
+    }
+  }, [headerScriptsRaw]);
+
   useEffect(() => {
-    // Remove any existing custom header elements to avoid duplicates
     const existingElements = document.querySelectorAll("[data-custom-header]");
     existingElements.forEach((el) => el.remove());
 
-    if (!advertisingEnabled) {
-      return;
-    }
+    if (!advertisingEnabled) return;
 
-    // Inject legacy header code if it exists
+    // Inject legacy header code
     if (legacyHeaderCode) {
       const sanitizedLegacyCode = DOMPurify.sanitize(legacyHeaderCode, {
         ALLOWED_TAGS: ["script", "style", "meta", "link", "ins"],
@@ -74,7 +70,7 @@ export const EnhancedHeaderCodeInjector = () => {
       document.head.appendChild(legacyContainer);
     }
 
-    // Inject active header scripts
+    // Inject each active script
     headerScripts
       .filter((script) => script.is_active)
       .forEach((script) => {
@@ -112,7 +108,6 @@ export const EnhancedHeaderCodeInjector = () => {
       });
 
     return () => {
-      // Cleanup on unmount or when settings change
       const elements = document.querySelectorAll("[data-custom-header]");
       elements.forEach((el) => el.remove());
     };

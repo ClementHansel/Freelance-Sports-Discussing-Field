@@ -5,19 +5,6 @@ import { useEffect } from "react";
 import { supabase } from "@/components/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface ForumSetting {
-  id: string;
-  setting_key: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setting_value: any;
-  setting_type: string;
-  category: string;
-  description?: string;
-  is_public: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
 interface ParsedSetting {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any;
@@ -57,7 +44,7 @@ export const useForumSettings = () => {
 
       const settingsMap: ForumSettings = {};
 
-      data?.forEach((setting: ForumSetting) => {
+      data?.forEach((setting) => {
         let value = setting.setting_value;
 
         switch (setting.setting_type) {
@@ -65,7 +52,8 @@ export const useForumSettings = () => {
             value = value === true || value === "true";
             break;
           case "number":
-            value = typeof value === "number" ? value : parseFloat(value);
+            value =
+              typeof value === "number" ? value : parseFloat(value as string);
             break;
           case "string":
           case "code":
@@ -78,8 +66,8 @@ export const useForumSettings = () => {
           value,
           type: setting.setting_type,
           category: setting.category,
-          description: setting.description,
-          isPublic: setting.is_public,
+          description: setting.description ?? undefined,
+          isPublic: setting.is_public ?? false,
         };
       });
 
@@ -109,7 +97,9 @@ export const useForumSettings = () => {
       console.log("✏️ Updating setting:", { key, value, type });
 
       let jsonValue = value;
-      if (type === "number") jsonValue = value.toString();
+      if (type === "number" && typeof value !== "string") {
+        jsonValue = String(value);
+      }
 
       const { error } = await supabase.rpc("set_forum_setting", {
         key_name: key,

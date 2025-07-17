@@ -38,15 +38,15 @@ export const useIPTracker = () => {
             .select("id")
             .eq("slug", pathParts[2])
             .single();
-          categoryId = category?.id;
+          categoryId = category?.id ?? null;
         } else if (pathParts[1] === "t" && pathParts[2]) {
           const { data: topic } = await supabase
             .from("topics")
             .select("id, category_id")
             .eq("slug", pathParts[2])
             .single();
-          topicId = topic?.id;
-          categoryId = topic?.category_id;
+          topicId = topic?.id ?? null;
+          categoryId = topic?.category_id ?? null;
         }
 
         const searchQuery = searchParams.get("q") || searchParams.get("search");
@@ -61,21 +61,21 @@ export const useIPTracker = () => {
             p_session_id: sessionId,
             p_page_path: pagePath,
             p_page_title: document.title,
-            p_referrer: document.referrer || null,
+            p_referrer: document.referrer ?? null,
             p_user_agent: navigator.userAgent,
-            p_search_query: searchQuery,
-            p_category_id: categoryId,
-            p_topic_id: topicId,
-            p_country_code: geoData.country_code,
-            p_country_name: geoData.country_name,
-            p_city: geoData.city,
-            p_region: geoData.region,
-            p_latitude: geoData.latitude,
-            p_longitude: geoData.longitude,
-            p_timezone: geoData.timezone,
-            p_is_vpn: geoData.is_vpn,
-            p_is_proxy: geoData.is_proxy,
-            p_isp: geoData.isp,
+            p_search_query: searchQuery || undefined,
+            p_category_id: categoryId || undefined,
+            p_topic_id: topicId || undefined,
+            p_country_code: geoData.country_code ?? null,
+            p_country_name: geoData.country_name ?? null,
+            p_city: geoData.city ?? null,
+            p_region: geoData.region ?? null,
+            p_latitude: geoData.latitude ?? null,
+            p_longitude: geoData.longitude ?? null,
+            p_timezone: geoData.timezone ?? null,
+            p_is_vpn: geoData.is_vpn ?? null,
+            p_is_proxy: geoData.is_proxy ?? null,
+            p_isp: geoData.isp ?? null,
           });
         } else {
           await supabase.rpc("log_page_visit", {
@@ -83,11 +83,11 @@ export const useIPTracker = () => {
             p_session_id: sessionId,
             p_page_path: pagePath,
             p_page_title: document.title,
-            p_referrer: document.referrer || null,
+            p_referrer: document.referrer || undefined,
             p_user_agent: navigator.userAgent,
-            p_search_query: searchQuery,
-            p_category_id: categoryId,
-            p_topic_id: topicId,
+            p_search_query: searchQuery || undefined,
+            p_category_id: categoryId || undefined,
+            p_topic_id: topicId || undefined,
           });
         }
       } catch (error) {
@@ -117,11 +117,11 @@ export const useIPTracker = () => {
         p_ip_address: ip,
         p_session_id: sessionId,
         p_activity_type: activityType,
-        p_content_id: contentId || null,
-        p_content_type: contentType || null,
-        p_action_data: actionData || null,
+        p_content_id: contentId || undefined,
+        p_content_type: contentType || undefined,
+        p_action_data: actionData || undefined,
         p_is_blocked: isBlocked,
-        p_blocked_reason: blockedReason || null,
+        p_blocked_reason: blockedReason || undefined,
       });
     } catch (error) {
       console.error("Failed to log activity:", error);

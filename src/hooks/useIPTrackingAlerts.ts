@@ -95,8 +95,8 @@ export const useIPTrackingAlerts = () => {
             content_type: "topic",
             content_id: topic.id,
             content_title: topic.title,
-            created_at: topic.created_at,
-            author_id: topic.author_id,
+            created_at: topic.created_at ?? new Date().toISOString(),
+            author_id: topic.author_id ?? undefined,
             author_username: username,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             category_name: (topic.categories as any)?.name,
@@ -139,8 +139,8 @@ export const useIPTrackingAlerts = () => {
             content_id: post.id,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             content_title: `Post in: ${(post.topics as any)?.title}`,
-            created_at: post.created_at,
-            author_id: post.author_id,
+            created_at: post.created_at ?? new Date().toISOString(),
+            author_id: post.author_id ?? undefined,
             author_username: username,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             category_name: (post.topics as any)?.categories?.name,

@@ -127,6 +127,9 @@ export const useCreateTopic = () => {
       // Log IP activity for topic creation - IP is guaranteed to exist
       try {
         const sessionId = sessionManager.getSessionId();
+        if (!sessionId) {
+          throw new Error("No session ID found for logging IP activity.");
+        }
         await supabase.rpc("log_ip_activity", {
           p_ip_address: userIP,
           p_session_id: sessionId,

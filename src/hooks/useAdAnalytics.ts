@@ -1,6 +1,13 @@
 import { supabase } from "@/components/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
+// Define a strict type to avoid nulls
+type Totals = {
+  impressions: number;
+  clicks: number;
+  revenue: number;
+};
+
 export interface AdAnalyticsData {
   ad_space_id: string;
   ad_space_name: string;
@@ -60,25 +67,29 @@ export const useAdAnalytics = (
 
       if (previousError) throw previousError;
 
+      // Safe helper function to ensure numbers
+      const safeNumber = (value: number | null | undefined): number =>
+        value ?? 0;
+
       // Calculate current totals
-      const currentTotals = currentData?.reduce(
+      const currentTotals: Totals = (currentData ?? []).reduce<Totals>(
         (acc, item) => ({
-          impressions: acc.impressions + (item.impressions || 0),
-          clicks: acc.clicks + (item.clicks || 0),
-          revenue: acc.revenue + (item.revenue || 0),
+          impressions: acc.impressions + safeNumber(item.impressions),
+          clicks: acc.clicks + safeNumber(item.clicks),
+          revenue: acc.revenue + safeNumber(item.revenue),
         }),
         { impressions: 0, clicks: 0, revenue: 0 }
-      ) || { impressions: 0, clicks: 0, revenue: 0 };
+      );
 
       // Calculate previous totals
-      const previousTotals = previousData?.reduce(
+      const previousTotals: Totals = (previousData ?? []).reduce<Totals>(
         (acc, item) => ({
-          impressions: acc.impressions + (item.impressions || 0),
-          clicks: acc.clicks + (item.clicks || 0),
-          revenue: acc.revenue + (item.revenue || 0),
+          impressions: acc.impressions + safeNumber(item.impressions),
+          clicks: acc.clicks + safeNumber(item.clicks),
+          revenue: acc.revenue + safeNumber(item.revenue),
         }),
         { impressions: 0, clicks: 0, revenue: 0 }
-      ) || { impressions: 0, clicks: 0, revenue: 0 };
+      );
 
       // Calculate growth percentages
       const calculateGrowth = (current: number, previous: number) => {
