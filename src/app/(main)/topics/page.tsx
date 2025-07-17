@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
@@ -132,7 +133,11 @@ const Topics = () => {
                       <Clock className="h-4 w-4" />
                       <span className="whitespace-nowrap">
                         {formatDistanceToNow(
-                          new Date(topic.last_reply_at || topic.created_at)
+                          new Date(
+                            topic.last_reply_at ??
+                              topic.created_at ??
+                              new Date()
+                          )
                         )}{" "}
                         ago
                       </span>

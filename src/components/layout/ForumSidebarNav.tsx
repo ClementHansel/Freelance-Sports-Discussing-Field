@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Clock, Star, Plus, Home, Users } from "lucide-react";
+import { TrendingUp, Clock, Star, Home, Rss, User } from "lucide-react";
 import { useCategoriesByActivity } from "@/hooks/useCategoriesByActivity";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import { useEnhancedForumStats } from "@/hooks/useEnhancedForumStats";
@@ -48,9 +48,12 @@ export const ForumSidebarNav = () => {
 
   const navItems = [
     { label: "Home", path: "/", icon: Home },
+    { label: "Blog", path: "/blog", icon: Rss },
     { label: "Hot", path: "/?sort=hot", icon: TrendingUp },
     { label: "New", path: "/?sort=new", icon: Clock },
     { label: "Top", path: "/?sort=top", icon: Star },
+    { label: "Categories", path: "categories", icon: Star },
+    { label: "Profile", path: "/dashboard/user", icon: User },
   ];
 
   return (
