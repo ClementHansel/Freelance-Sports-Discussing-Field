@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -105,7 +105,7 @@ export const TopicView = () => {
     }
   );
 
-  const posts = postsData?.posts ?? [];
+  const posts = useMemo(() => postsData?.posts ?? [], [postsData?.posts]);
   const totalPosts = postsData?.totalCount ?? 0;
   const { mutate: editTopic, isPending: isUpdatingTopic } = useEditTopic();
 
@@ -241,7 +241,7 @@ export const TopicView = () => {
     postsPerPage
   );
 
-  const color = topic.categories?.color ?? undefined;
+  const color = topic?.categories?.color ?? undefined;
 
   // Handle cross-page navigation and scrolling to specific posts
   useEffect(() => {
@@ -454,21 +454,29 @@ export const TopicView = () => {
               <div className="flex items-center space-x-1">
                 <User className="h-3 w-3 md:h-4 md:w-4" />
                 <span>
-                  {"profiles" in topic && topic.profiles?.username
-                    ? topic.profiles.username
-                    : "Anonymous User"}
+                  {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    "profiles" in topic && (topic.profiles as any)?.username
+                      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (topic.profiles as any).username
+                      : "Anonymous User"
+                  }
                 </span>
               </div>
               <span className="hidden sm:inline">•</span>
               <span>
-                Created {formatDistanceToNow(new Date(topic.created_at))} ago
+                Created{" "}
+                {formatDistanceToNow(
+                  new Date(topic.last_reply_at ?? Date.now())
+                )}{" "}
+                ago
               </span>
               {topic.last_reply_at &&
                 topic.reply_count &&
                 topic.reply_count > 0 && (
                   <>
                     <span className="hidden sm:inline">•</span>
-                    {topic.last_post_id ? (
+                    {"last_post_id" in topic && topic.last_post_id && (
                       <Link
                         href={`#post-${topic.last_post_id}`}
                         className="hover:text-primary transition-colors"
@@ -476,12 +484,13 @@ export const TopicView = () => {
                         Last reply{" "}
                         {formatDistanceToNow(new Date(topic.last_reply_at))} ago
                       </Link>
-                    ) : (
-                      <span>
-                        Last reply{" "}
-                        {formatDistanceToNow(new Date(topic.last_reply_at))} ago
-                      </span>
-                    )}
+                    )}{" "}
+                    : (
+                    <span>
+                      Last reply{" "}
+                      {formatDistanceToNow(new Date(topic.last_reply_at))} ago
+                    </span>
+                    )
                   </>
                 )}
               <span className="hidden sm:inline">•</span>
