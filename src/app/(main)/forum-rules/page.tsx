@@ -1,14 +1,9 @@
-import fs from "fs";
-import path from "path";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { getForumSetting } from "@/lib/getForumSetting";
+import { getStaticMarkdown } from "@/lib/static/getStaticMarkdown";
 
 export default async function ForumRulesPage() {
-  const fallbackContent = fs.readFileSync(
-    path.join(process.cwd(), "src/data/static/forumRules.md"),
-    "utf-8"
-  );
-
+  const fallbackContent = getStaticMarkdown("forumRules.md");
   const content = await getForumSetting("forum_rules", fallbackContent);
 
   return (

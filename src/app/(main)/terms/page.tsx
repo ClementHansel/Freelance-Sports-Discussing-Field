@@ -1,14 +1,9 @@
-import fs from "fs";
-import path from "path";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { getForumSetting } from "@/lib/getForumSetting";
+import { getStaticMarkdown } from "@/lib/static/getStaticMarkdown";
 
 export default async function PrivacyPage() {
-  const fallbackContent = fs.readFileSync(
-    path.join(process.cwd(), "src/data/static/terms.md"),
-    "utf-8"
-  );
-
+  const fallbackContent = getStaticMarkdown("terms.md");
   const content = await getForumSetting("terms_content", fallbackContent);
 
   return (

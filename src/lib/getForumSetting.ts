@@ -1,18 +1,24 @@
-// lib/getForumSetting.ts
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
-);
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function getForumSetting(key: string, fallback: string) {
-  const { data, error } = await supabase
-    .from("settings")
-    .select("value")
-    .eq("key", key)
-    .single();
+  try {
+    if (!supabaseUrl || !supabaseAnonKey) throw new Error("Missing env vars");
 
-  if (error || !data?.value) return fallback;
-  return data.value;
+    const { data, error } = await supabase
+      .from("settings")
+      .select("value")
+      .eq("key", key)
+      .single();
+
+    if (error || !data?.value) return fallback;
+    return data.value;
+  } catch (e) {
+    console.warn(`[getForumSetting] Fallback triggered for "${key}"`, e);
+    return fallback;
+  }
 }
