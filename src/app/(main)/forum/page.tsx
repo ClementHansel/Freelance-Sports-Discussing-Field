@@ -257,10 +257,15 @@ export default function ForumHome() {
                       category_slug: topic.categories?.slug || "",
                       slug: topic.slug,
                       hot_score: 0,
-                      last_post_id: topic.last_post_id ?? null,
+                      last_post_id: null,
                       parent_category_id:
                         topic.categories?.parent_category_id || null,
-                      parent_category_slug: null, // Not available in useTopics data
+                      parent_category_slug: null,
+                      is_pinned: false,
+                      is_locked: false,
+                      view_count: topic.view_count ?? 0,
+                     reply_count: row.reply_count ?? 0
+                      last_reply_at: topic.last_reply_at ?? "",
                     }}
                     onReport={handleReport}
                   />

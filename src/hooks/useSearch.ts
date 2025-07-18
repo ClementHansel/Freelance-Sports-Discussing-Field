@@ -78,9 +78,11 @@ export const useSearch = (query: string, filter: SearchFilter = "all") => {
           }) || [];
 
         // Get author data for topics
-        const topicAuthorIds = [
+        const topicAuthorIds: string[] = [
           ...new Set(
-            filteredTopics.map((topic) => topic.author_id).filter(Boolean)
+            filteredTopics
+              .map((topic) => topic.author_id)
+              .filter((id): id is string => id !== null)
           ),
         ];
         const [topicProfilesData, topicTempUsersData] = await Promise.all([
@@ -127,7 +129,7 @@ export const useSearch = (query: string, filter: SearchFilter = "all") => {
             slug: topic.slug,
             reply_count: topic.reply_count || 0,
             view_count: topic.view_count || 0,
-            created_at: topic.created_at,
+            created_at: topic.created_at || "",
           });
         });
       }
@@ -180,7 +182,7 @@ export const useSearch = (query: string, filter: SearchFilter = "all") => {
             category_color: "#3b82f6",
             reply_count: 0,
             view_count: 0,
-            created_at: post.created_at,
+            created_at: post.created_at || "",
           });
         });
       }
@@ -238,7 +240,7 @@ export const useSearch = (query: string, filter: SearchFilter = "all") => {
             category_slug: category.slug,
             reply_count: 0,
             view_count: 0,
-            created_at: category.created_at,
+            created_at: category.created_at || "",
           });
         });
       }

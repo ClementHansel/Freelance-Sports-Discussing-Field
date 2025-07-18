@@ -77,13 +77,13 @@ export const useVPNTrafficStats = () => {
 
         // Create a Set of known VPN IPs for fast lookup
         const vpnIPSet = new Set(
-          vpnIPs?.map((item) => item.ip_address.toString()) || []
+          vpnIPs?.map((item) => String(item.ip_address)) || []
         );
 
         // Count VPN-specific blocked attempts by matching IPs
         const vpnBlockedAttempts =
           blockedAttempts?.filter((attempt) =>
-            vpnIPSet.has(attempt.ip_address.toString())
+            vpnIPSet.has(String(attempt.ip_address))
           ) || [];
 
         console.log("🔒 VPN blocked attempts:", vpnBlockedAttempts.length);

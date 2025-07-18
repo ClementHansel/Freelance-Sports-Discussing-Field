@@ -64,7 +64,7 @@ export const useTopic = (identifier: string) => {
 
       // Get last post ID if topic has replies
       let lastPostId = null;
-      if (topicData.reply_count > 0) {
+      if ((topicData.reply_count ?? 0) > 0) {
         const { data: lastPost } = await supabase
           .from("posts")
           .select("id")

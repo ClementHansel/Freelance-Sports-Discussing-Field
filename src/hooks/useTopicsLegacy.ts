@@ -65,7 +65,11 @@ export const useTopicsLegacy = (categoryId?: string, limit = 25) => {
 
       // Extract unique author IDs
       const authorIds = [
-        ...new Set(topics.map((topic) => topic.author_id).filter(Boolean)),
+        ...new Set(
+          topics
+            .map((topic) => topic.author_id)
+            .filter((id): id is string => !!id)
+        ),
       ];
 
       // Fetch user data from both profiles and temporary_users
@@ -103,7 +107,9 @@ export const useTopicsLegacy = (categoryId?: string, limit = 25) => {
       });
 
       // Get last post IDs for topics that have replies
-      const topicsWithReplies = topics.filter((topic) => topic.reply_count > 0);
+      const topicsWithReplies = topics.filter(
+        (topic) => (topic.reply_count ?? 0) > 0
+      );
       const lastPostIds = await Promise.all(
         topicsWithReplies.map(async (topic) => {
           const { data: lastPost } = await supabase

@@ -58,9 +58,12 @@ export const useTopicByPath = (
         categoryError = error;
       }
 
-      if (categoryError) {
-        console.error("Error fetching category:", categoryError);
-        throw categoryError;
+      if (categoryError || !categoryData) {
+        console.error(
+          "Error fetching category or category not found:",
+          categoryError
+        );
+        throw categoryError || new Error("Category not found.");
       }
 
       // Get topic by slug and category
