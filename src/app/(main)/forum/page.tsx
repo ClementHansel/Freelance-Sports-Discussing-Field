@@ -250,22 +250,28 @@ export default function ForumHome() {
                     key={topic.id}
                     topic={{
                       ...topic,
-                      username: topic.profiles?.username || null,
-                      avatar_url: topic.profiles?.avatar_url || null,
-                      category_name: topic.categories?.name || "General",
-                      category_color: topic.categories?.color || "#3b82f6",
-                      category_slug: topic.categories?.slug || "",
-                      slug: topic.slug,
+                      username: topic.profiles?.username ?? null,
+                      avatar_url: topic.profiles?.avatar_url ?? null,
+                      category_name: topic.categories?.name ?? "General",
+                      category_color: topic.categories?.color ?? "#3b82f6",
+                      category_slug: topic.categories?.slug ?? "",
+                      slug: topic.slug ?? "",
                       hot_score: 0,
-                      last_post_id: null,
+                      last_post_id: topic.last_post_id ?? null,
                       parent_category_id:
-                        topic.categories?.parent_category_id || null,
+                        topic.categories?.parent_category_id ?? null,
                       parent_category_slug: null,
+
+                      // Required non-nullable fields in HotTopic
+                      created_at: topic.created_at ?? "", // ← REQUIRED: HotTopic expects string
+                      updated_at: topic.updated_at ?? "", // ← REQUIRED
+                      reply_count: topic.reply_count ?? 0, // ← REQUIRED: HotTopic expects number
+                      view_count: topic.view_count ?? 0, // ← REQUIRED
+                      last_reply_at: topic.last_reply_at ?? "", // ← REQUIRED
+
+                      // Boolean flags
                       is_pinned: false,
                       is_locked: false,
-                      view_count: topic.view_count ?? 0,
-                     reply_count: row.reply_count ?? 0
-                      last_reply_at: topic.last_reply_at ?? "",
                     }}
                     onReport={handleReport}
                   />

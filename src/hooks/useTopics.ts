@@ -13,6 +13,7 @@ export interface EnrichedTopic {
   reply_count: number | null;
   view_count: number | null;
   last_reply_at: string | null;
+  last_post_id?: string | null;
 
   // enriched fields
   author_username: string | null;
