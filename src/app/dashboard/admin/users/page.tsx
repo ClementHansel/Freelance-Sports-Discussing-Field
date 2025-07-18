@@ -1,18 +1,11 @@
 "use client";
+import AdminUsers from "@/components/dashboard/admin/user/Users";
+import { Suspense } from "react";
 
-import React from "react";
-import { UserManagement } from "@/components/dashboard/admin/user/UserManagement";
-
-export default function AdminUsersPage() {
+export default function AdminUserPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-muted-foreground mt-2">
-          View, manage roles, edit profiles, and ban users.
-        </p>
-      </div>
-      <UserManagement />
-    </div>
+    <Suspense fallback={<div>Loading Users Management..</div>}>
+      <AdminUsers />
+    </Suspense>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,96 +42,99 @@ export default function Settings() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Account Information
-        </h2>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              defaultValue={user.username}
-              className="mt-1"
-            />
-          </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              defaultValue={user.email}
-              className="mt-1"
-            />
-          </div>
-          <Button>Update Account</Button>
-        </div>
-      </Card>
-
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Notification Preferences
-        </h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
+      <Suspense
+        fallback={<div className="p-8 text-center">Loading Settings...</div>}
+      >
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Account Information
+          </h2>
+          <div className="space-y-4">
             <div>
-              <p className="font-medium">Email Notifications</p>
-              <p className="text-sm text-gray-600">
-                Receive email updates about forum activity
-              </p>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                defaultValue={user.username}
+                className="mt-1"
+              />
             </div>
-            <Switch
-              checked={notifications.email}
-              onCheckedChange={(checked) =>
-                setNotifications((prev) => ({ ...prev, email: checked }))
-              }
-            />
-          </div>
-          <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">Push Notifications</p>
-              <p className="text-sm text-gray-600">
-                Receive browser notifications
-              </p>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                defaultValue={user.email}
+                className="mt-1"
+              />
             </div>
-            <Switch
-              checked={notifications.push}
-              onCheckedChange={(checked) =>
-                setNotifications((prev) => ({ ...prev, push: checked }))
-              }
-            />
+            <Button>Update Account</Button>
           </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Mention Alerts</p>
-              <p className="text-sm text-gray-600">
-                Get notified when someone mentions you
-              </p>
-            </div>
-            <Switch
-              checked={notifications.mentions}
-              onCheckedChange={(checked) =>
-                setNotifications((prev) => ({ ...prev, mentions: checked }))
-              }
-            />
-          </div>
-        </div>
-        <Button className="mt-4" onClick={handleSaveSettings}>
-          Save Preferences
-        </Button>
-      </Card>
+        </Card>
 
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Privacy & Security
-        </h2>
-        <div className="space-y-4">
-          <Button variant="outline">Change Password</Button>
-          <Button variant="outline">Download My Data</Button>
-          <Button variant="destructive">Delete Account</Button>
-        </div>
-      </Card>
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Notification Preferences
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Email Notifications</p>
+                <p className="text-sm text-gray-600">
+                  Receive email updates about forum activity
+                </p>
+              </div>
+              <Switch
+                checked={notifications.email}
+                onCheckedChange={(checked) =>
+                  setNotifications((prev) => ({ ...prev, email: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Push Notifications</p>
+                <p className="text-sm text-gray-600">
+                  Receive browser notifications
+                </p>
+              </div>
+              <Switch
+                checked={notifications.push}
+                onCheckedChange={(checked) =>
+                  setNotifications((prev) => ({ ...prev, push: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">Mention Alerts</p>
+                <p className="text-sm text-gray-600">
+                  Get notified when someone mentions you
+                </p>
+              </div>
+              <Switch
+                checked={notifications.mentions}
+                onCheckedChange={(checked) =>
+                  setNotifications((prev) => ({ ...prev, mentions: checked }))
+                }
+              />
+            </div>
+          </div>
+          <Button className="mt-4" onClick={handleSaveSettings}>
+            Save Preferences
+          </Button>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Privacy & Security
+          </h2>
+          <div className="space-y-4">
+            <Button variant="outline">Change Password</Button>
+            <Button variant="outline">Download My Data</Button>
+            <Button variant="destructive">Delete Account</Button>
+          </div>
+        </Card>
+      </Suspense>
     </div>
   );
 }

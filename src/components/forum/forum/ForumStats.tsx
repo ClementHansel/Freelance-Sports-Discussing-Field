@@ -1,7 +1,7 @@
-
-import React from 'react';
-import { Users, MessageSquare, TrendingUp } from 'lucide-react';
-import { useForumStats } from '@/hooks/useForumStats';
+"use client";
+import React from "react";
+import { Users, MessageSquare, TrendingUp } from "lucide-react";
+import { useForumStats } from "@/hooks/useForumStats";
 
 export const ForumStats = () => {
   const { data: stats, isLoading } = useForumStats();
@@ -37,7 +37,7 @@ export const ForumStats = () => {
               <p className="text-2xl font-bold">{stats?.total_members || 0}</p>
             </div>
           </div>
-          
+
           <div className="flex flex-col items-center space-y-2">
             <MessageSquare className="h-6 w-6 text-green-500" />
             <div className="space-y-1">
@@ -45,7 +45,7 @@ export const ForumStats = () => {
               <p className="text-2xl font-bold">{stats?.total_posts || 0}</p>
             </div>
           </div>
-          
+
           <div className="flex flex-col items-center space-y-2">
             <TrendingUp className="h-6 w-6 text-orange-500" />
             <div className="space-y-1">

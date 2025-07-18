@@ -1,6 +1,11 @@
+"use client";
 import { SpamManagement } from "@/components/dashboard/moderator/spam/SpamManagement";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function AdminSpamPage() {
-  return <SpamManagement />;
+  return (
+    <Suspense fallback={<div>Loading Spam Management...</div>}>
+      <SpamManagement />
+    </Suspense>
+  );
 }

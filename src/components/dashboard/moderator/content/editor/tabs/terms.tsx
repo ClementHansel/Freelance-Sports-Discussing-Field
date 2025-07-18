@@ -1,3 +1,4 @@
+"use client";
 import { InlineContentEditor } from "@/components/dashboard/admin/InlineContentEditor";
 import React from "react";
 

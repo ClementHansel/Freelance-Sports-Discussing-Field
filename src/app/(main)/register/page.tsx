@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+import React, { Suspense } from "react";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
-const Register = () => {
-  return <RegisterForm />;
-};
-
-export default Register;
+export default function Register() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading form...</div>}>
+      <RegisterForm />
+    </Suspense>
+  );
+}

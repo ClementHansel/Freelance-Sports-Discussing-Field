@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { Loader } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 
-export default function DashboardRootPage() {
+function DashboardRedirect() {
   const router = useRouter();
   const { user, loading } = useUser();
 
@@ -19,18 +18,13 @@ export default function DashboardRootPage() {
       // Role-based redirect
       const role = user.role;
 
-      if (role === "superadmin") {
-        router.push("/dashboard/admin"); // entry point to all admin/mod/staff/settings
-      } else if (role === "admin") {
+      if (role === "superadmin" || role === "admin") {
         router.push("/dashboard/admin");
       } else if (role === "moderator") {
         router.push("/dashboard/moderator");
-      } else if (role === "moderator") {
-        router.push("/dashboard/content-editor");
       } else if (role === "staff") {
         router.push("/dashboard/staff");
       } else {
-        // fallback to public user dashboard
         router.push("/dashboard/users");
       }
     }
@@ -43,5 +37,19 @@ export default function DashboardRootPage() {
         Redirecting to your dashboard...
       </p>
     </div>
+  );
+}
+
+export default function DashboardRootPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          Loading...
+        </div>
+      }
+    >
+      <DashboardRedirect />
+    </Suspense>
   );
 }

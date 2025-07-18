@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { useCategoryStats } from "@/hooks/useCategoryStats";
 import { Card } from "@/components/ui/card";
@@ -61,117 +61,125 @@ export default function CategoriesPage() {
   const { data: level3Categories = [] } = useCategories(undefined, 3);
 
   return (
-    <div className="space-y-6 w-full overflow-x-hidden">
-      {/* Breadcrumb */}
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">
-                <Home className="h-4 w-4" />
-              </Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>All Categories</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <Suspense fallback={<div>Loading ...</div>}>
+      <div className="space-y-6 w-full overflow-x-hidden">
+        {/* Breadcrumb */}
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/">
+                  <Home className="h-4 w-4" />
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>All Categories</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">All Categories</h1>
-        <p className="text-muted-foreground">
-          Browse all forum categories and discussions
-        </p>
-      </div>
-
-      {/* Main Forums */}
-      {level1Categories.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">Main Forums</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {level1Categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
-          </div>
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">All Categories</h1>
+          <p className="text-muted-foreground">
+            Browse all forum categories and discussions
+          </p>
         </div>
-      )}
 
-      {/* Province/State Forums */}
-      {level2Categories.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            Province & State Forums
-          </h2>
-          <div className="space-y-6">
-            {(() => {
-              const canadianForums = level2Categories
-                .filter(
-                  (c) =>
-                    c.parent_category_id ===
-                    "11111111-1111-1111-1111-111111111111"
-                )
-                .sort((a, b) => (a.region || "").localeCompare(b.region || ""));
+        {/* Main Forums */}
+        {level1Categories.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">
+              Main Forums
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {level1Categories.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
+          </div>
+        )}
 
-              const usaForums = level2Categories
-                .filter(
-                  (c) =>
-                    c.parent_category_id ===
-                    "22222222-2222-2222-2222-222222222222"
-                )
-                .sort((a, b) => (a.region || "").localeCompare(b.region || ""));
+        {/* Province/State Forums */}
+        {level2Categories.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">
+              Province & State Forums
+            </h2>
+            <div className="space-y-6">
+              {(() => {
+                const canadianForums = level2Categories
+                  .filter(
+                    (c) =>
+                      c.parent_category_id ===
+                      "11111111-1111-1111-1111-111111111111"
+                  )
+                  .sort((a, b) =>
+                    (a.region || "").localeCompare(b.region || "")
+                  );
 
-              const tournamentForums = level2Categories
-                .filter(
-                  (c) =>
-                    c.parent_category_id ===
-                    "33333333-3333-3333-3333-333333333333"
-                )
-                .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+                const usaForums = level2Categories
+                  .filter(
+                    (c) =>
+                      c.parent_category_id ===
+                      "22222222-2222-2222-2222-222222222222"
+                  )
+                  .sort((a, b) =>
+                    (a.region || "").localeCompare(b.region || "")
+                  );
 
-              const countries = [];
-              if (canadianForums.length > 0)
-                countries.push({ name: "Canada", forums: canadianForums });
-              if (usaForums.length > 0)
-                countries.push({ name: "USA", forums: usaForums });
-              if (tournamentForums.length > 0)
-                countries.push({
-                  name: "Tournaments & General Discussion",
-                  forums: tournamentForums,
-                });
+                const tournamentForums = level2Categories
+                  .filter(
+                    (c) =>
+                      c.parent_category_id ===
+                      "33333333-3333-3333-3333-333333333333"
+                  )
+                  .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
-              return countries.map((country) => (
-                <div key={country.name} className="space-y-3">
-                  <h3 className="text-lg font-semibold text-foreground border-b pb-2">
-                    {country.name}
-                  </h3>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {country.forums.map((category) => (
-                      <CategoryCard key={category.id} category={category} />
-                    ))}
+                const countries = [];
+                if (canadianForums.length > 0)
+                  countries.push({ name: "Canada", forums: canadianForums });
+                if (usaForums.length > 0)
+                  countries.push({ name: "USA", forums: usaForums });
+                if (tournamentForums.length > 0)
+                  countries.push({
+                    name: "Tournaments & General Discussion",
+                    forums: tournamentForums,
+                  });
+
+                return countries.map((country) => (
+                  <div key={country.name} className="space-y-3">
+                    <h3 className="text-lg font-semibold text-foreground border-b pb-2">
+                      {country.name}
+                    </h3>
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {country.forums.map((category) => (
+                        <CategoryCard key={category.id} category={category} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ));
-            })()}
+                ));
+              })()}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Age Group & Skill Level Categories */}
-      {level3Categories.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            Age Group & Skill Level Categories
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {level3Categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
+        {/* Age Group & Skill Level Categories */}
+        {level3Categories.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground">
+              Age Group & Skill Level Categories
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {level3Categories.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Suspense>
   );
 }
