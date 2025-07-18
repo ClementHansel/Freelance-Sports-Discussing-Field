@@ -13,12 +13,13 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import {
+  ActiveVisitor,
+  GeographicSummary,
   useActiveVisitors,
   useGeographicSummary,
 } from "@/hooks/useActiveVisitors";
 import { useVPNTrafficStats } from "@/hooks/useVPNTrafficStats";
 import { formatDistanceToNow } from "date-fns";
-import { CountryType, VisitorType } from "@/types/admin/admin";
 
 const LiveVisitorMonitor: React.FC = () => {
   const {
@@ -239,7 +240,7 @@ const LiveVisitorMonitor: React.FC = () => {
           </div>
         ) : activeVisitors && activeVisitors.length > 0 ? (
           <div className="space-y-3">
-            {activeVisitors.map((visitor: VisitorType, index: number) => (
+            {activeVisitors.map((visitor: ActiveVisitor, index: number) => (
               <div
                 key={`${visitor.ip_address}-${index}`}
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border"
@@ -309,7 +310,7 @@ const LiveVisitorMonitor: React.FC = () => {
             Geographic Distribution (Last 24 Hours)
           </h3>
           <div className="space-y-2">
-            {geoSummary.slice(0, 10).map((country: CountryType) => (
+            {geoSummary.slice(0, 10).map((country: GeographicSummary) => (
               <div
                 key={country.country_code}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded"

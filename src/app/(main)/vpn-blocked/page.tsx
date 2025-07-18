@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/accordion";
 import { useVPNDetection } from "@/hooks/useVPNDetection";
 
-export const VPNBlocked = () => {
+export default function VPNBlocked() {
   const router = useRouter();
   const { isVPN, isLoading, recheckVPN } = useVPNDetection();
 
@@ -189,4 +189,4 @@ export const VPNBlocked = () => {
       </Card>
     </div>
   );
-};
+}

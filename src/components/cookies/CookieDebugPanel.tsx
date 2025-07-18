@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +12,7 @@ export const CookieDebugPanel: React.FC = () => {
   const trackingId = getSetting("google_analytics_id", "");
 
   // Hide in production
-  return null;
+  if (process.env.NODE_ENV === "production") return null;
 
   return (
     <Card className="fixed top-4 right-4 p-3 bg-muted/90 backdrop-blur-sm border z-50 max-w-sm">
@@ -23,19 +24,28 @@ export const CookieDebugPanel: React.FC = () => {
             {hasConsent("analytics") ? "Granted" : "Denied"}
           </Badge>
         </div>
+
         <div className="flex items-center justify-between">
           <span>GA Tracking ID:</span>
           <Badge variant={trackingId ? "default" : "destructive"}>
             {trackingId ? "Set" : "Missing"}
           </Badge>
         </div>
+
         <div className="flex items-center justify-between">
           <span>GA Script Loaded:</span>
-          <Badge variant={window.gtag ? "default" : "secondary"}>
-            {window.gtag ? "Yes" : "No"}
+          <Badge
+            variant={
+              typeof window !== "undefined" && "gtag" in window
+                ? "default"
+                : "secondary"
+            }
+          >
+            {typeof window !== "undefined" && "gtag" in window ? "Yes" : "No"}
           </Badge>
         </div>
-        {consent && (
+
+        {!!consent?.timestamp && (
           <div className="text-xs text-muted-foreground">
             Consent timestamp:{" "}
             {new Date(consent.timestamp).toLocaleTimeString()}

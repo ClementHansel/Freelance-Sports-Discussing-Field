@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { Category } from "./useCategories";
 import { supabase } from "@/components/integrations/supabase/client";
 
@@ -11,8 +10,11 @@ export const useCategoriesByActivity = (
   parentId?: string | null,
   level?: number
 ) => {
+  // convert null to undefined for the queryKey
+  const normalizedParentId = parentId ?? undefined;
+
   return useQuery({
-    queryKey: ["categories-by-activity", parentId, level],
+    queryKey: ["categories-by-activity", normalizedParentId, level],
     queryFn: async () => {
       console.log(
         "Fetching categories by activity with parentId:",
@@ -21,9 +23,8 @@ export const useCategoriesByActivity = (
         level
       );
 
-      // Call the RPC function with correct parameter names
       const { data, error } = await supabase.rpc("get_categories_by_activity", {
-        p_parent_category_id: parentId,
+        p_parent_category_id: parentId ?? undefined,
         p_category_level: level,
       });
 

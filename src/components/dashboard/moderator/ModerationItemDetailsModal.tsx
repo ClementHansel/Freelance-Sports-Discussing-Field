@@ -1,8 +1,8 @@
+// sports-disscussing-field\src\components\dashboard\moderator\ModerationItemDetailsModal.tsx
 "use client";
 
 import React from "react";
 import Link from "next/link";
-
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
 import {
   CheckCircle,
   UserX,
@@ -25,23 +24,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-
-interface ModerationItem {
-  id: string;
-  type: "topic" | "post";
-  title: string;
-  content: string;
-  author: string;
-  created_at: string;
-  reported_count: number;
-  status: "pending" | "approved" | "rejected";
-  is_anonymous?: boolean;
-  ip_address?: string | null;
-  slug?: string;
-  category_slug?: string;
-  topic_id?: string;
-  topic_slug?: string;
-}
+import { ModerationItem } from "@/hooks/moderation/useModerationItems";
 
 interface ModerationItemDetailsModalProps {
   isOpen: boolean;
@@ -65,14 +48,14 @@ export const ModerationItemDetailsModal: React.FC<
   const getContentUrl = (item: ModerationItem) => {
     if (item.type === "topic") {
       if (item.category_slug && item.slug) {
-        return `/${item.category_slug}/${item.slug}`;
+        return `/forum/${item.category_slug}/${item.slug}`; // Added /forum/ prefix
       }
-      return `/topic/${item.id}`;
+      return `/forum/topic/${item.id}`; // Added /forum/topic/ prefix
     } else {
       if (item.category_slug && item.topic_slug) {
-        return `/${item.category_slug}/${item.topic_slug}`;
+        return `/forum/${item.category_slug}/${item.topic_slug}#post-${item.id}`; // Added /forum/ prefix and post ID anchor
       }
-      return `/topic/${item.topic_id}`;
+      return `/forum/topic/${item.topic_id}#post-${item.id}`; // Added /forum/topic/ prefix and post ID anchor
     }
   };
 
@@ -111,7 +94,11 @@ export const ModerationItemDetailsModal: React.FC<
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
-                    {formatDistanceToNow(new Date(item.created_at))} ago
+                    {/* Corrected: Provide a fallback for item.created_at if it's null */}
+                    {formatDistanceToNow(new Date(item.created_at || 0), {
+                      addSuffix: true,
+                    })}{" "}
+                    ago
                   </div>
                   {item.ip_address && (
                     <div className="flex items-center gap-1">
@@ -126,6 +113,8 @@ export const ModerationItemDetailsModal: React.FC<
               <Link
                 href={getContentUrl(item)}
                 className="flex items-center gap-1 text-primary hover:text-primary/80 text-sm"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <ExternalLink className="h-4 w-4" />
                 View Live

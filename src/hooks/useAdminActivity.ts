@@ -1,15 +1,68 @@
+// sports-disscussing-field\src\hooks\useAdminActivity.ts
 import { supabase } from "@/components/integrations/supabase/client";
+import { Database } from "@/components/integrations/supabase/types";
 import { useQuery } from "@tanstack/react-query";
 
-export interface AdminActivity {
+// Define the row types from your Supabase database for clarity
+type TopicRow = Database["public"]["Tables"]["topics"]["Row"];
+type PostRow = Database["public"]["Tables"]["posts"]["Row"];
+
+// Define the exact shape of data returned by the 'topics' select query
+type FetchedTopic = Pick<
+  TopicRow,
+  | "id"
+  | "title"
+  | "slug"
+  | "created_at"
+  | "author_id"
+  | "canonical_url"
+  | "category_id"
+  | "content"
+  | "ip_address"
+  | "is_anonymous"
+  | "is_locked"
+  | "is_pinned"
+  | "last_reply_at"
+  | "moderation_status"
+  | "updated_at"
+  | "view_count"
+> & {
+  categories: { slug: string } | null; // Adjusted to reflect single object or null
+};
+
+// Define the exact shape of data returned by the 'posts' select query
+type FetchedPost = Pick<
+  PostRow,
+  | "id"
+  | "content"
+  | "created_at"
+  | "author_id"
+  | "topic_id"
+  | "ip_address"
+  | "is_anonymous"
+  | "moderation_status"
+  | "parent_post_id"
+  | "updated_at"
+> & {
+  topics: {
+    id: string;
+    title: string;
+    slug: string;
+    categories: { slug: string } | null; // Adjusted to reflect single object or null
+  } | null;
+};
+
+// Define the structure for an AdminActivity item
+interface AdminActivity {
   id: string;
   user: string;
   action: string;
   content: string;
-  time: string;
+  time: string | null; // created_at can be null
   type: "topic" | "post";
-  ip_address?: string;
+  ip_address: string | undefined; // Can be string or undefined
   topic_info?: {
+    // Optional for posts
     title: string;
     slug: string;
     category_slug: string;
@@ -17,7 +70,8 @@ export interface AdminActivity {
 }
 
 export const useAdminActivity = () => {
-  return useQuery({
+  return useQuery<AdminActivity[], Error>({
+    // Specify return type for useQuery
     queryKey: ["admin-activity"],
     queryFn: async () => {
       // Get recent topics with category information
@@ -30,15 +84,29 @@ export const useAdminActivity = () => {
           slug,
           created_at,
           author_id,
+          canonical_url,
+          category_id,
+          content,
+          ip_address,
+          is_anonymous,
+          is_locked,
+          is_pinned,
+          last_reply_at,
+          moderation_status,
+          updated_at,
+          view_count,
           categories (
             slug
           )
         `
-        )
-        .order("created_at", { ascending: false })
-        .limit(5);
+        );
+      // Explicitly cast data to FetchedTopic[] to mark the type as used
+      const typedRecentTopics: FetchedTopic[] | null = recentTopics;
 
-      if (topicsError) throw topicsError;
+      if (topicsError) {
+        console.error("Error fetching recent topics:", topicsError.message);
+        throw new Error("Failed to load recent topics.");
+      }
 
       // Get recent posts with topic and category information
       const { data: recentPosts, error: postsError } = await supabase
@@ -51,6 +119,10 @@ export const useAdminActivity = () => {
           author_id,
           topic_id,
           ip_address,
+          is_anonymous,
+          moderation_status,
+          parent_post_id,
+          updated_at,
           topics (
             id,
             title,
@@ -60,21 +132,24 @@ export const useAdminActivity = () => {
             )
           )
         `
-        )
-        .order("created_at", { ascending: false })
-        .limit(5);
+        );
+      // Explicitly cast data to FetchedPost[] to mark the type as used
+      const typedRecentPosts: FetchedPost[] | null = recentPosts;
 
-      if (postsError) throw postsError;
+      if (postsError) {
+        console.error("Error fetching recent posts:", postsError.message);
+        throw new Error("Failed to load recent posts.");
+      }
 
-      // Get unique author IDs
-      const authorIds = [
-        ...new Set(
+      // Get unique author IDs, ensuring they are strings
+      const authorIds: string[] = Array.from(
+        new Set(
           [
-            ...(recentTopics?.map((topic) => topic.author_id) || []),
-            ...(recentPosts?.map((post) => post.author_id) || []),
-          ].filter(Boolean)
-        ),
-      ];
+            ...(typedRecentTopics || []).map((topic) => topic.author_id),
+            ...(typedRecentPosts || []).map((post) => post.author_id),
+          ].filter((id): id is string => id !== null)
+        )
+      );
 
       // Fetch user data from both profiles and temporary_users
       const [profilesData, temporaryUsersData] = await Promise.all([
@@ -96,7 +171,7 @@ export const useAdminActivity = () => {
       ]);
 
       // Create a map for quick user lookup
-      const userMap = new Map();
+      const userMap = new Map<string, string>();
       profilesData.forEach((profile) => {
         userMap.set(profile.id, profile.username);
       });
@@ -108,7 +183,7 @@ export const useAdminActivity = () => {
       const activities: AdminActivity[] = [];
 
       // Add topics
-      recentTopics?.forEach((topic) => {
+      typedRecentTopics?.forEach((topic) => {
         const username = topic.author_id
           ? userMap.get(topic.author_id) || "Anonymous User"
           : "Anonymous User";
@@ -119,26 +194,25 @@ export const useAdminActivity = () => {
           content: topic.title,
           time: topic.created_at,
           type: "topic",
-          ip_address: undefined, // Topics don't have IP addresses tracked currently
+          ip_address: topic.ip_address as string | undefined, // Cast to string | undefined
           topic_info: {
             title: topic.title,
             slug: topic.slug,
-            category_slug: topic.categories?.slug || "",
+            category_slug: topic.categories?.slug || "", // Access slug directly
           },
         });
       });
 
       // Add posts
-      recentPosts?.forEach((post) => {
+      typedRecentPosts?.forEach((post) => {
         const username = post.author_id
           ? userMap.get(post.author_id) || "Anonymous User"
           : "Anonymous User";
-        const topicTitle = post.topics?.title || "Unknown Topic";
         activities.push({
           id: post.id,
           user: username,
           action: "Replied to",
-          content: topicTitle,
+          content: post.content, // Changed to post.content for post activity
           time: post.created_at,
           type: "post",
           ip_address: post.ip_address ? String(post.ip_address) : undefined,
@@ -146,7 +220,7 @@ export const useAdminActivity = () => {
             ? {
                 title: post.topics.title,
                 slug: post.topics.slug,
-                category_slug: post.topics.categories?.slug || "",
+                category_slug: post.topics.categories?.slug || "", // Access slug directly
               }
             : undefined,
         });
@@ -154,7 +228,10 @@ export const useAdminActivity = () => {
 
       // Sort by time and take the 10 most recent
       return activities
-        .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
+        .sort(
+          (a, b) =>
+            new Date(b.time || 0).getTime() - new Date(a.time || 0).getTime()
+        ) // Handle null for time
         .slice(0, 10);
     },
   });

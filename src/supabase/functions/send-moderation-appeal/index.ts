@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.50.3";
@@ -280,7 +283,6 @@ const handler = async (req: Request): Promise<Response> => {
         },
       }
     );
-    // eslint-disable-next-line
   } catch (error: any) {
     console.error("Error in send-moderation-appeal function:", error);
     return new Response(

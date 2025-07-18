@@ -75,7 +75,7 @@ export const SharedMenuContent = ({ onNavigate }: SharedMenuContentProps) => {
               </Link>
             </Button>
             <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link to="/settings" onClick={onNavigate}>
+              <Link href="/settings" onClick={onNavigate}>
                 Settings
               </Link>
             </Button>

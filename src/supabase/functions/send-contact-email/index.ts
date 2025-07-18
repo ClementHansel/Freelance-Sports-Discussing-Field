@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @ts-nocheck
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
@@ -48,7 +49,6 @@ const validateInputLengths = (data: ContactEmailRequest): string | null => {
   return null;
 };
 
-// eslint-disable-next-line
 const logSecurityEvent = (event: string, details: any, clientIP?: string) => {
   console.log(`SECURITY_EVENT: ${event}`, {
     timestamp: new Date().toISOString(),
@@ -284,7 +284,6 @@ const handler = async (req: Request): Promise<Response> => {
         },
       }
     );
-    // eslint-disable-next-line
   } catch (error: any) {
     // Log security events for different error types
     if (error.name === "SyntaxError") {

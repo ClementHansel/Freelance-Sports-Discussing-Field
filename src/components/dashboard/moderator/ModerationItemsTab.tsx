@@ -1,4 +1,4 @@
-// app/(admin)/moderation/_components/ModerationItemsTab.tsx
+// sports-disscussing-field\src\components\dashboard\moderator\ModerationItemsTab.tsx
 "use client";
 
 import React from "react";
@@ -16,24 +16,7 @@ import { Eye } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-// Re-define ModerationItem interface if not globally available
-interface ModerationItem {
-  id: string;
-  type: "topic" | "post";
-  title: string;
-  content: string;
-  author: string;
-  created_at: string;
-  reported_count: number;
-  status: "pending" | "approved" | "rejected";
-  is_anonymous?: boolean;
-  ip_address?: string | null;
-  slug?: string;
-  category_slug?: string;
-  topic_id?: string;
-  topic_slug?: string;
-}
+import { ModerationItem } from "@/hooks/moderation/useModerationItems";
 
 interface ModerationItemsTabProps {
   moderationItems: ModerationItem[];
@@ -106,7 +89,8 @@ export const ModerationItemsTab: React.FC<ModerationItemsTabProps> = ({
                   <TableCell>{item.author}</TableCell>
                   <TableCell>{item.reported_count}</TableCell>
                   <TableCell>
-                    {formatDistanceToNow(new Date(item.created_at), {
+                    {/* Corrected: Provide a fallback for item.created_at if it's null */}
+                    {formatDistanceToNow(new Date(item.created_at || 0), {
                       addSuffix: true,
                     })}
                   </TableCell>

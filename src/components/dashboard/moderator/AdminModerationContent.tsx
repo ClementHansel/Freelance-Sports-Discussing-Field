@@ -11,31 +11,16 @@ import { CategoryRequestsManager } from "@/components/dashboard/moderator/Catego
 import { ModerationItemDetailsModal } from "@/components/dashboard/moderator/ModerationItemDetailsModal";
 import { ReportDetailsModal } from "@/components/dashboard/moderator/ReportDetailsModal";
 import { ModerationItemsTab } from "@/components/dashboard/moderator/ModerationItemsTab";
-import { useModerationItems } from "@/hooks/moderation/useModerationItems";
+import {
+  ModerationItem,
+  useModerationItems,
+} from "@/hooks/moderation/useModerationItems";
 import {
   useApproveModerationItem,
   useBanIPModeration,
   useBanUserModeration,
   useRejectModerationItem,
 } from "@/hooks/moderation/useModerationActions";
-
-// Define ModerationItem interface if not already global
-interface ModerationItem {
-  id: string;
-  type: "topic" | "post";
-  title: string;
-  content: string;
-  author: string;
-  created_at: string;
-  reported_count: number;
-  status: "pending" | "approved" | "rejected";
-  is_anonymous?: boolean;
-  ip_address?: string | null;
-  slug?: string;
-  category_slug?: string;
-  topic_id?: string;
-  topic_slug?: string;
-}
 
 export const AdminModerationContent = () => {
   const queryClient = useQueryClient();

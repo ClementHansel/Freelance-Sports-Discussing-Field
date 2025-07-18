@@ -1,3 +1,4 @@
+// sports-disscussing-field\src\app\dashboard\admin\page.tsx
 "use client";
 
 import React from "react";
@@ -11,7 +12,6 @@ import { useAdminActivity } from "@/hooks/useAdminActivity";
 import { useActiveVisitors } from "@/hooks/useActiveVisitors";
 import dynamic from "next/dynamic";
 import { formatDistanceToNow } from "date-fns";
-import { ActivityType } from "@/types/admin/admin";
 
 // Dynamic imports in case they use browser-only logic
 const LiveVisitorMonitor = dynamic(
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
               ))}
             </div>
           ) : activities && activities.length > 0 ? (
-            activities.map((activity: ActivityType, index: number) => (
+            activities.map((activity, index) => (
               <div
                 key={`${activity.id}-${index}`}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -194,7 +194,11 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
                 <span className="text-sm text-gray-500 ml-4">
-                  {formatDistanceToNow(new Date(activity.time))} ago
+                  {/* Corrected: Provide a fallback for activity.time if it's null */}
+                  {formatDistanceToNow(new Date(activity.time || 0), {
+                    addSuffix: true,
+                  })}{" "}
+                  ago
                 </span>
               </div>
             ))

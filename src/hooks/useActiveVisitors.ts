@@ -1,7 +1,7 @@
 import { supabase } from "@/components/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
-interface ActiveVisitor {
+export interface ActiveVisitor {
   ip_address: string;
   country_code: string;
   country_name: string;
@@ -16,7 +16,7 @@ interface ActiveVisitor {
   is_vpn: boolean;
 }
 
-interface GeographicSummary {
+export interface GeographicSummary {
   country_code: string;
   country_name: string;
   visitor_count: number;

@@ -1,6 +1,5 @@
 // hooks/useModerationActions.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/components/integrations/supabase/client";
 
@@ -13,7 +12,7 @@ export const useApproveModerationItem = () => {
     mutationFn: async ({ id, type }) => {
       const { error } = await supabase
         .from(type === "topic" ? "topics" : "posts")
-        .update({ status: "approved" })
+        .update({ moderation_status: "approved" })
         .eq("id", id);
       if (error) throw new Error(error.message);
     },
@@ -40,7 +39,7 @@ export const useRejectModerationItem = () => {
     mutationFn: async ({ id, type }) => {
       const { error } = await supabase
         .from(type === "topic" ? "topics" : "posts")
-        .update({ status: "rejected" })
+        .update({ moderation_status: "rejected" })
         .eq("id", id);
       if (error) throw new Error(error.message);
     },
@@ -79,7 +78,7 @@ export const useBanUserModeration = () => {
       // Optionally, update the content status to rejected or deleted
       const { error: contentError } = await supabase
         .from(itemType === "topic" ? "topics" : "posts")
-        .update({ status: "rejected" }) // Or 'deleted'
+        .update({ moderation_status: "rejected" }) // Or 'deleted'
         .eq("id", itemId);
       if (contentError) throw new Error(contentError.message);
     },
@@ -116,7 +115,7 @@ export const useBanIPModeration = () => {
       // For now, we'll just update the content status.
       const { error: contentError } = await supabase
         .from(itemType === "topic" ? "topics" : "posts")
-        .update({ status: "rejected" }) // Or 'deleted', or add a 'banned_ip' flag
+        .update({ moderation_status: "rejected" }) // Or 'deleted', or add a 'banned_ip' flag
         .eq("id", itemId)
         .eq("ip_address", ipAddress); // Ensure it matches the IP
 

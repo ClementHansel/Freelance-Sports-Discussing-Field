@@ -1,5 +1,5 @@
-import React from 'react';
-import { InlineContentEditor } from '@/components/admin/InlineContentEditor';
+import React from "react";
+import { InlineContentEditor } from "../dashboard/admin/InlineContentEditor";
 
 const Privacy = () => {
   return (

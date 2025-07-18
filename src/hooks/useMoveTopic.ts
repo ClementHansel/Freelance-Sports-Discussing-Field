@@ -35,8 +35,16 @@ export const useMoveTopic = () => {
 
       // Log the admin action
       try {
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError) throw userError;
+        if (!user?.id) throw new Error("User ID is missing.");
+
         await supabase.rpc("log_admin_action", {
-          p_admin_user_id: (await supabase.auth.getUser()).data.user?.id,
+          p_admin_user_id: user.id,
           p_action_type: "topic_moved",
           p_target_type: "topic",
           p_target_id: topicId,

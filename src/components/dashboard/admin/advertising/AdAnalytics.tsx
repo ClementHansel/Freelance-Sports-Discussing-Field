@@ -21,8 +21,7 @@ import {
   MousePointer,
   Calendar,
 } from "lucide-react";
-import { useAdAnalytics } from "@/hooks/useAdAnalytics";
-import { AdSpacePerformanceItem } from "@/types/admin/admin";
+import { AdAnalyticsData, useAdAnalytics } from "@/hooks/useAdAnalytics";
 import { Badge } from "@/components/ui/badge";
 
 export const AdAnalytics = () => {
@@ -164,7 +163,7 @@ export const AdAnalytics = () => {
         <CardContent>
           {adSpacePerformance.length > 0 ? (
             <div className="space-y-4">
-              {adSpacePerformance.map((item: AdSpacePerformanceItem) => (
+              {adSpacePerformance.map((item: AdAnalyticsData) => (
                 <div
                   key={item.ad_space_id}
                   className="flex items-center justify-between p-4 border rounded-lg"
