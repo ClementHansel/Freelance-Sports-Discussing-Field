@@ -19,6 +19,7 @@ import { StickyBanner } from "@/components/ads/StickyBanner";
 import { IPTrackingWrapper } from "@/components/IPTrackingWrapper";
 import { VPNGuard } from "@/components/VPNGuard";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Minor Hockey Talks",
@@ -36,28 +37,30 @@ export default function RootLayout({
       <body>
         <ReactQueryProvider>
           <TooltipProvider>
-            <AuthProvider>
-              <OnlineUsersProvider>
-                <StickyBanner />
-                <EnhancedHeaderCodeInjector />
-                <CookieConsent />
-                <Toaster />
-                <Sonner />
-                <AnalyticsProvider>
-                  <IPTrackingWrapper>
-                    <CookieDebugPanel />
-                    <ScrollToTop />
-                    <MetadataProvider>
-                      <MaintenanceWrapper>
-                        <ErrorBoundary>
-                          <VPNGuard>{children}</VPNGuard>
-                        </ErrorBoundary>
-                      </MaintenanceWrapper>
-                    </MetadataProvider>
-                  </IPTrackingWrapper>
-                </AnalyticsProvider>
-              </OnlineUsersProvider>
-            </AuthProvider>
+            <Suspense>
+              <AuthProvider>
+                <OnlineUsersProvider>
+                  <StickyBanner />
+                  <EnhancedHeaderCodeInjector />
+                  <CookieConsent />
+                  <Toaster />
+                  <Sonner />
+                  <AnalyticsProvider>
+                    <IPTrackingWrapper>
+                      <CookieDebugPanel />
+                      <ScrollToTop />
+                      <MetadataProvider>
+                        <MaintenanceWrapper>
+                          <ErrorBoundary>
+                            <VPNGuard>{children}</VPNGuard>
+                          </ErrorBoundary>
+                        </MaintenanceWrapper>
+                      </MetadataProvider>
+                    </IPTrackingWrapper>
+                  </AnalyticsProvider>
+                </OnlineUsersProvider>
+              </AuthProvider>
+            </Suspense>
           </TooltipProvider>
         </ReactQueryProvider>
       </body>

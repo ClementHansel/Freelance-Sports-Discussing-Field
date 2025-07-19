@@ -1,27 +1,32 @@
-import { useState, useEffect, useCallback } from 'react';
-import { getUserIP, getIPGeolocation } from '@/utils/ipUtils';
+import { useState, useEffect, useCallback } from "react";
 
 export const useVPNDetection = () => {
-  console.log('🔧 useVPNDetection hook initialized');
+  console.log("🔧 useVPNDetection hook initialized");
   const [isVPN, setIsVPN] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('🔧 useVPNDetection hook state:', { isVPN, isLoading, error });
+  console.log("🔧 useVPNDetection hook state:", { isVPN, isLoading, error });
 
   const checkVPNStatus = useCallback(async () => {
-    console.log('🔧 checkVPNStatus called');
+    setIsLoading(true);
+    console.log("🔧 checkVPNStatus called");
+    setError(null);
+
     try {
+      // dynamically import your IP utils so they’re only loaded on the client
+      const { getUserIP, getIPGeolocation } = await import("@/utils/ipUtils");
+
       setIsLoading(true);
       setError(null);
-      
-      console.log('🔍 Starting VPN detection check...');
-      
+
+      console.log("🔍 Starting VPN detection check...");
+
       // Get user's IP address
       const ip = await getUserIP();
-      
+
       if (!ip) {
-        console.warn('❌ Could not retrieve IP address for VPN check');
+        console.warn("❌ Could not retrieve IP address for VPN check");
         setIsVPN(false); // Allow access if we can't determine IP
         return;
       }
@@ -30,30 +35,35 @@ export const useVPNDetection = () => {
 
       // Get geolocation data which includes VPN detection
       const geoData = await getIPGeolocation(ip);
-      
-      console.log('📍 Geolocation data received:', {
+
+      console.log("📍 Geolocation data received:", {
         ip,
         is_vpn: geoData?.is_vpn,
         is_proxy: geoData?.is_proxy,
         isp: geoData?.isp,
-        country: geoData?.country_name
+        country: geoData?.country_name,
       });
-      
-      if (geoData && typeof geoData.is_vpn === 'boolean') {
+
+      if (geoData && typeof geoData.is_vpn === "boolean") {
         setIsVPN(geoData.is_vpn);
-        
+
         if (geoData.is_vpn) {
-          console.log('🚨 VPN DETECTED for IP:', ip, 'ISP:', geoData.isp);
+          console.log("🚨 VPN DETECTED for IP:", ip, "ISP:", geoData.isp);
         } else {
-          console.log('✅ No VPN detected for IP:', ip, 'ISP:', geoData.isp);
+          console.log("✅ No VPN detected for IP:", ip, "ISP:", geoData.isp);
         }
       } else {
-        console.warn('⚠️ VPN status could not be determined from geolocation data:', geoData);
+        console.warn(
+          "⚠️ VPN status could not be determined from geolocation data:",
+          geoData
+        );
         setIsVPN(false); // Allow access if we can't determine VPN status
       }
     } catch (err) {
-      console.error('💥 Error checking VPN status:', err);
-      setError(err instanceof Error ? err.message : 'Failed to check VPN status');
+      console.error("💥 Error checking VPN status:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to check VPN status"
+      );
       setIsVPN(false); // Allow access on error to prevent breaking the site
     } finally {
       setIsLoading(false);
@@ -61,7 +71,7 @@ export const useVPNDetection = () => {
   }, []);
 
   useEffect(() => {
-    console.log('🔧 useVPNDetection useEffect triggered');
+    console.log("🔧 useVPNDetection useEffect triggered");
     checkVPNStatus();
   }, [checkVPNStatus]);
 
@@ -70,6 +80,6 @@ export const useVPNDetection = () => {
     isLoading,
     error,
     isBlocked: isVPN === true,
-    recheckVPN: checkVPNStatus
+    recheckVPN: checkVPNStatus,
   };
 };
