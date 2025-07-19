@@ -19,7 +19,7 @@ export default function Seo() {
       </div>
 
       <Tabs defaultValue="home" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 max-w-[600px]">
+        <TabsList className="grid w-full grid-cols-3 w-full">
           <TabsTrigger value="home" className="gap-2">
             <Home className="h-4 w-4" />
             Home Page

@@ -109,7 +109,7 @@ export const useCategoryBySlug = (slug: string) => {
       const { data, error } = await supabase
         .from("categories")
         .select("*")
-        .eq("slug", slug)
+        .ilike("slug", slug)
         .eq("is_active", true)
         .single();
 

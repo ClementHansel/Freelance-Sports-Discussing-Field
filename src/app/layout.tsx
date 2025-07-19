@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   title: "Minor Hockey Talks",
   description:
     "A respectful community to discuss minor hockey topics, stories, and updates.",
+  icons: {
+    icon: "/d27f0c5d-529f-45bd-9e66-45b3a46ab1a6.png",
+    shortcut: "/d27f0c5d-529f-45bd-9e66-45b3a46ab1a6.png",
+  },
 };
 
 export default function RootLayout({
